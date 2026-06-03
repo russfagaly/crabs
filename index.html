@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2026 Alameda 12u All-Stars</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f172a;color:#e2e8f0;font-family:'Segoe UI',Arial,sans-serif;font-size:14px}
+.header{background:linear-gradient(135deg,#1e3a5f,#0f172a);padding:20px;text-align:center;border-bottom:2px solid #334155}
+.header h1{font-size:22px;font-weight:800;color:#f8fafc;letter-spacing:1px}
+.header .sub{font-size:13px;color:#94a3b8;margin-top:4px}
+.record{display:flex;gap:24px;justify-content:center;margin-top:14px}
+.record .stat{text-align:center}
+.record .val{font-size:28px;font-weight:800;color:#38bdf8}
+.record .lbl{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px}
+.section{padding:16px;max-width:1100px;margin:0 auto}
+.section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:2px;
+  color:#94a3b8;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid #1e293b}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:24px}
+.card{background:#1e293b;border-radius:10px;padding:14px;border:1px solid #334155}
+.card.available{border-color:#22c55e33}
+.card.soon{border-color:#facc1533}
+.card.unavailable{border-color:#ef444433}
+.card .player-name{font-size:15px;font-weight:700;color:#f1f5f9;margin-bottom:6px}
+.card .badge-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.card .pc{font-size:12px;color:#94a3b8}
+.card .avail-msg{font-size:11px;color:#64748b;margin-top:4px}
+.card .trend{font-size:22px;font-weight:800}
+.card .l3-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:10px}
+.card .l3-stat{text-align:center;background:#0f172a;border-radius:6px;padding:5px 2px}
+.card .l3-val{font-size:16px;font-weight:700;color:#38bdf8}
+.card .l3-lbl{font-size:9px;color:#64748b;text-transform:uppercase}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:24px}
+th{background:#1e293b;color:#94a3b8;padding:8px 6px;text-align:center;
+   font-weight:600;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid #334155}
+th.left{text-align:left;padding-left:10px}
+td{padding:7px 6px;text-align:center;border-bottom:1px solid #1e293b;color:#e2e8f0}
+td.name{text-align:left;padding-left:10px;font-weight:600;color:#f1f5f9}
+tr:hover td{background:#1e293b55}
+.hi{color:#22c55e;font-weight:700}
+.med{color:#facc15}
+.lo{color:#94a3b8}
+.bad{color:#ef4444}
+.game-row{display:flex;align-items:center;gap:10px;padding:8px 10px;
+  background:#1e293b;border-radius:8px;margin-bottom:6px;font-size:13px}
+.game-row .result{font-weight:800;font-size:14px;min-width:28px}
+.game-row .result.W{color:#22c55e}.game-row .result.L{color:#ef4444}
+.game-row .score{color:#38bdf8;font-weight:700}
+.game-row .opp{color:#94a3b8;flex:1}
+.game-row .round{font-size:10px;color:#64748b;background:#0f172a;padding:2px 6px;border-radius:4px}
+.footer{text-align:center;padding:20px;font-size:11px;color:#334155}
+.no-games{text-align:center;padding:40px;color:#475569;font-size:14px}
+@media(max-width:600px){
+  .record{gap:16px}.record .val{font-size:22px}
+  .cards{grid-template-columns:1fr 1fr}
+  table{font-size:11px}th,td{padding:5px 3px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚾ 2026 Alameda 12u All-Stars</h1>
+  <div class="sub">International Team · Updated June 03, 2026</div>
+  <div class="record">
+    <div class="stat"><div class="val">1-0</div><div class="lbl">Record</div></div>
+    <div class="stat"><div class="val">1</div><div class="lbl">Games</div></div>
+    <div class="stat"><div class="val">20</div><div class="lbl">Runs For</div></div>
+    <div class="stat"><div class="val">8</div><div class="lbl">Runs Against</div></div>
+  </div>
+</div>
+
+<div class="section">
+
+<!-- BATTING -->
+<div class="section-title">🥎 Batting</div>
+<table>
+<thead><tr>
+  <th class="left">Player</th>
+  <th>GP</th><th>PA</th><th>AB</th><th>H</th>
+  <th>2B</th><th>3B</th><th>HR</th><th>TB</th>
+  <th>R</th><th>RBI</th><th>BB</th><th>SB</th>
+  <th>AVG</th><th>OBP</th><th>SLG</th><th>OPS</th>
+</tr></thead><tbody>
+<tr>
+  <td class="name">Adrien Romero</td>
+  <td>1</td><td>4</td><td>4</td><td>4</td>
+  <td>2</td><td>0</td><td>1</td><td>9</td>
+  <td>4</td><td>1</td><td>0</td><td>1</td>
+  <td class="hi">1.000</td>
+  <td class="hi">1.000</td>
+  <td class="hi">2.250</td>
+  <td class="hi">3.250</td>
+</tr><tr>
+  <td class="name">Kaleo Pontmayor</td>
+  <td>1</td><td>4</td><td>3</td><td>3</td>
+  <td>0</td><td>1</td><td>0</td><td>5</td>
+  <td>4</td><td>0</td><td>1</td><td>0</td>
+  <td class="hi">1.000</td>
+  <td class="hi">1.000</td>
+  <td class="hi">1.667</td>
+  <td class="hi">2.667</td>
+</tr><tr>
+  <td class="name">Orion Mitchell</td>
+  <td>1</td><td>4</td><td>3</td><td>2</td>
+  <td>2</td><td>0</td><td>0</td><td>4</td>
+  <td>4</td><td>2</td><td>1</td><td>0</td>
+  <td class="hi">.667</td>
+  <td class="hi">.750</td>
+  <td class="hi">1.333</td>
+  <td class="hi">2.083</td>
+</tr><tr>
+  <td class="name">Nico Yuen</td>
+  <td>1</td><td>3</td><td>1</td><td>1</td>
+  <td>0</td><td>0</td><td>0</td><td>1</td>
+  <td>2</td><td>1</td><td>2</td><td>0</td>
+  <td class="hi">1.000</td>
+  <td class="hi">1.000</td>
+  <td class="hi">1.000</td>
+  <td class="hi">2.000</td>
+</tr><tr>
+  <td class="name">RJ Fagaly</td>
+  <td>1</td><td>4</td><td>4</td><td>3</td>
+  <td>1</td><td>0</td><td>0</td><td>4</td>
+  <td>3</td><td>4</td><td>0</td><td>0</td>
+  <td class="hi">.750</td>
+  <td class="hi">.750</td>
+  <td class="hi">1.000</td>
+  <td class="hi">1.750</td>
+</tr><tr>
+  <td class="name">Roland Meyer</td>
+  <td>1</td><td>3</td><td>3</td><td>2</td>
+  <td>1</td><td>0</td><td>0</td><td>3</td>
+  <td>0</td><td>2</td><td>0</td><td>0</td>
+  <td class="hi">.667</td>
+  <td class="hi">.667</td>
+  <td class="hi">1.000</td>
+  <td class="hi">1.667</td>
+</tr><tr>
+  <td class="name">Drew Bryant</td>
+  <td>1</td><td>4</td><td>3</td><td>2</td>
+  <td>0</td><td>0</td><td>0</td><td>2</td>
+  <td>1</td><td>2</td><td>1</td><td>0</td>
+  <td class="hi">.667</td>
+  <td class="hi">.750</td>
+  <td class="hi">.667</td>
+  <td class="hi">1.417</td>
+</tr><tr>
+  <td class="name">Jordan Cerda-Zein</td>
+  <td>1</td><td>4</td><td>3</td><td>1</td>
+  <td>0</td><td>0</td><td>0</td><td>1</td>
+  <td>0</td><td>1</td><td>1</td><td>0</td>
+  <td class="med">.333</td>
+  <td class="hi">.500</td>
+  <td class="lo">.333</td>
+  <td class="med">.833</td>
+</tr><tr>
+  <td class="name">Colton Dignon</td>
+  <td>1</td><td>4</td><td>4</td><td>1</td>
+  <td>1</td><td>0</td><td>0</td><td>2</td>
+  <td>1</td><td>0</td><td>0</td><td>1</td>
+  <td class="lo">.250</td>
+  <td class="lo">.250</td>
+  <td class="med">.500</td>
+  <td class="lo">.750</td>
+</tr><tr>
+  <td class="name">Jonah Lee</td>
+  <td>1</td><td>3</td><td>1</td><td>0</td>
+  <td>0</td><td>0</td><td>0</td><td>0</td>
+  <td>1</td><td>1</td><td>1</td><td>0</td>
+  <td class="lo">.000</td>
+  <td class="hi">.667</td>
+  <td class="lo">.000</td>
+  <td class="lo">.667</td>
+</tr><tr>
+  <td class="name">Huston Garvine</td>
+  <td>1</td><td>4</td><td>4</td><td>0</td>
+  <td>0</td><td>0</td><td>0</td><td>0</td>
+  <td>0</td><td>0</td><td>0</td><td>0</td>
+  <td class="lo">.000</td>
+  <td class="lo">.000</td>
+  <td class="lo">.000</td>
+  <td class="lo">.000</td>
+</tr><tr>
+  <td class="name">Kai Lin</td>
+  <td>1</td><td>3</td><td>3</td><td>0</td>
+  <td>0</td><td>0</td><td>0</td><td>0</td>
+  <td>0</td><td>1</td><td>0</td><td>0</td>
+  <td class="lo">.000</td>
+  <td class="lo">.000</td>
+  <td class="lo">.000</td>
+  <td class="lo">.000</td>
+</tr></tbody></table>
+
+<!-- PITCHING -->
+<div class="section-title">⚾ Pitching</div>
+<table>
+<thead><tr>
+  <th class="left">Player</th>
+  <th>App</th><th>IP</th><th>K</th><th>BB</th>
+  <th>ERA</th><th>WHIP</th><th>K/IP</th><th>BAA</th><th>Strike%</th><th>Pitches</th>
+</tr></thead><tbody>
+<tr>
+  <td class="name">Huston Garvine</td>
+  <td>1</td><td>1.0</td>
+  <td class="hi">2</td>
+  <td>1</td>
+  <td class="hi">.00</td>
+  <td class="bad">2.00</td>
+  <td class="hi">2.00</td>
+  <td class="hi">.200</td>
+  <td class="lo">55.0%</td>
+  <td>20</td>
+</tr><tr>
+  <td class="name">Roland Meyer</td>
+  <td>1</td><td>1.0</td>
+  <td class="hi">2</td>
+  <td>0</td>
+  <td class="hi">.00</td>
+  <td class="hi">1.00</td>
+  <td class="hi">2.00</td>
+  <td class="hi">.200</td>
+  <td class="lo">57.9%</td>
+  <td>19</td>
+</tr><tr>
+  <td class="name">Kaleo Pontmayor</td>
+  <td>1</td><td>1.0</td>
+  <td class="hi">2</td>
+  <td>0</td>
+  <td class="hi">.00</td>
+  <td class="bad">2.00</td>
+  <td class="hi">2.00</td>
+  <td class="bad">.400</td>
+  <td class="hi">65.0%</td>
+  <td>20</td>
+</tr><tr>
+  <td class="name">RJ Fagaly</td>
+  <td>1</td><td>1.0</td>
+  <td class="hi">2</td>
+  <td>1</td>
+  <td class="bad">18.00</td>
+  <td class="bad">3.00</td>
+  <td class="hi">2.00</td>
+  <td class="bad">.400</td>
+  <td class="lo">57.1%</td>
+  <td>28</td>
+</tr><tr>
+  <td class="name">Orion Mitchell</td>
+  <td>1</td><td>1.0</td>
+  <td class="lo">0</td>
+  <td>2</td>
+  <td class="bad">36.00</td>
+  <td class="bad">5.00</td>
+  <td class="lo">.00</td>
+  <td class="bad">.500</td>
+  <td class="med">58.1%</td>
+  <td>31</td>
+</tr></tbody></table>
+
+<!-- PITCHING AVAILABILITY -->
+<div class="section-title">⚡ Pitching Availability</div>
+<div class="cards">
+
+  <div class="card available">
+    <div class="player-name">Adrien Romero</div>
+    <div class="badge-row"><span style="background:#22c55e;color:#000;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">AVAILABLE</span><span class="pc">No outings</span></div>
+    
+    <div class="avail-msg">Season IP: — · K: —</div>
+  </div>
+  <div class="card available">
+    <div class="player-name">Colton Dignon</div>
+    <div class="badge-row"><span style="background:#22c55e;color:#000;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">AVAILABLE</span><span class="pc">No outings</span></div>
+    
+    <div class="avail-msg">Season IP: — · K: —</div>
+  </div>
+  <div class="card available">
+    <div class="player-name">Drew Bryant</div>
+    <div class="badge-row"><span style="background:#22c55e;color:#000;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">AVAILABLE</span><span class="pc">No outings</span></div>
+    
+    <div class="avail-msg">Season IP: — · K: —</div>
+  </div>
+  <div class="card available">
+    <div class="player-name">Huston Garvine</div>
+    <div class="badge-row"><span style="background:#22c55e;color:#000;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">AVAILABLE</span><span class="pc">Last: 20p</span></div>
+    
+    <div class="avail-msg">Season IP: 1.0 · K: 2</div>
+  </div>
+  <div class="card available">
+    <div class="player-name">Jonah Lee</div>
+    <div class="badge-row"><span style="background:#22c55e;color:#000;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">AVAILABLE</span><span class="pc">No outings</span></div>
+    
+    <div class="avail-msg">Season IP: — · K: —</div>
+  </div>
+  <div class="card available">
+    <div class="player-name">Jordan Cerda-Zein</div>
+    <div class="badge-row"><span style="background:#22c55e;color:#000;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">AVAILABLE</span><span class="pc">No outings</span></div>
+    
+    <div class="avail-msg">Season IP: — · K: —</div>
+  </div>
+  <div class="card available">
+    <div class="player-name">Kai Lin</div>
+    <div class="badge-row"><span style="background:#22c55e;color:#000;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">AVAILABLE</span><span class="pc">No outings</span></div>
+    
+    <div class="avail-msg">Season IP: — · K: —</div>
+  </div>
+  <div class="card available">
+    <div class="player-name">Kaleo Pontmayor</div>
+    <div class="badge-row"><span style="background:#22c55e;color:#000;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">AVAILABLE</span><span class="pc">Last: 20p</span></div>
+    
+    <div class="avail-msg">Season IP: 1.0 · K: 2</div>
+  </div>
+  <div class="card available">
+    <div class="player-name">Nico Yuen</div>
+    <div class="badge-row"><span style="background:#22c55e;color:#000;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">AVAILABLE</span><span class="pc">No outings</span></div>
+    
+    <div class="avail-msg">Season IP: — · K: —</div>
+  </div>
+  <div class="card available">
+    <div class="player-name">Roland Meyer</div>
+    <div class="badge-row"><span style="background:#22c55e;color:#000;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">AVAILABLE</span><span class="pc">Last: 19p</span></div>
+    
+    <div class="avail-msg">Season IP: 1.0 · K: 2</div>
+  </div>
+  <div class="card soon">
+    <div class="player-name">Orion Mitchell</div>
+    <div class="badge-row"><span style="background:#facc15;color:#000;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">TOMORROW</span><span class="pc">Last: 31p</span></div>
+    <div class="avail-msg">Eligible: Jun 04</div>
+    <div class="avail-msg">Season IP: 1.0 · K: 0</div>
+  </div>
+  <div class="card soon">
+    <div class="player-name">RJ Fagaly</div>
+    <div class="badge-row"><span style="background:#facc15;color:#000;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">TOMORROW</span><span class="pc">Last: 28p</span></div>
+    <div class="avail-msg">Eligible: Jun 04</div>
+    <div class="avail-msg">Season IP: 1.0 · K: 2</div>
+  </div>
+</div>
+
+<!-- HOT/COLD TRACKER -->
+<div class="section-title">🔥 Last 3 Games — Hot/Cold Tracker</div>
+<div class="cards">
+
+  <div class="card">
+    <div class="player-name">Adrien Romero</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span class="trend" style="color:#ef4444">▼</span>
+      <div>
+        <div style="font-size:11px;color:#64748b">L3 OPS</div>
+        <div style="font-size:18px;font-weight:800;color:#38bdf8">2.000</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:11px;color:#64748b">Season</div>
+        <div style="font-size:13px;color:#94a3b8">3.250</div>
+      </div>
+    </div>
+    <div class="l3-stats">
+      <div class="l3-stat"><div class="l3-val">1.000</div><div class="l3-lbl">AVG</div></div>
+      <div class="l3-stat"><div class="l3-val">4</div><div class="l3-lbl">R</div></div>
+      <div class="l3-stat"><div class="l3-val">1</div><div class="l3-lbl">RBI</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="player-name">Kaleo Pontmayor</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span class="trend" style="color:#ef4444">▼</span>
+      <div>
+        <div style="font-size:11px;color:#64748b">L3 OPS</div>
+        <div style="font-size:18px;font-weight:800;color:#38bdf8">2.000</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:11px;color:#64748b">Season</div>
+        <div style="font-size:13px;color:#94a3b8">2.667</div>
+      </div>
+    </div>
+    <div class="l3-stats">
+      <div class="l3-stat"><div class="l3-val">1.000</div><div class="l3-lbl">AVG</div></div>
+      <div class="l3-stat"><div class="l3-val">4</div><div class="l3-lbl">R</div></div>
+      <div class="l3-stat"><div class="l3-val">0</div><div class="l3-lbl">RBI</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="player-name">Nico Yuen</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span class="trend" style="color:#facc15">●</span>
+      <div>
+        <div style="font-size:11px;color:#64748b">L3 OPS</div>
+        <div style="font-size:18px;font-weight:800;color:#38bdf8">2.000</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:11px;color:#64748b">Season</div>
+        <div style="font-size:13px;color:#94a3b8">2.000</div>
+      </div>
+    </div>
+    <div class="l3-stats">
+      <div class="l3-stat"><div class="l3-val">1.000</div><div class="l3-lbl">AVG</div></div>
+      <div class="l3-stat"><div class="l3-val">2</div><div class="l3-lbl">R</div></div>
+      <div class="l3-stat"><div class="l3-val">1</div><div class="l3-lbl">RBI</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="player-name">RJ Fagaly</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span class="trend" style="color:#ef4444">▼</span>
+      <div>
+        <div style="font-size:11px;color:#64748b">L3 OPS</div>
+        <div style="font-size:18px;font-weight:800;color:#38bdf8">1.500</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:11px;color:#64748b">Season</div>
+        <div style="font-size:13px;color:#94a3b8">1.750</div>
+      </div>
+    </div>
+    <div class="l3-stats">
+      <div class="l3-stat"><div class="l3-val">.750</div><div class="l3-lbl">AVG</div></div>
+      <div class="l3-stat"><div class="l3-val">3</div><div class="l3-lbl">R</div></div>
+      <div class="l3-stat"><div class="l3-val">4</div><div class="l3-lbl">RBI</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="player-name">Drew Bryant</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span class="trend" style="color:#facc15">●</span>
+      <div>
+        <div style="font-size:11px;color:#64748b">L3 OPS</div>
+        <div style="font-size:18px;font-weight:800;color:#38bdf8">1.417</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:11px;color:#64748b">Season</div>
+        <div style="font-size:13px;color:#94a3b8">1.417</div>
+      </div>
+    </div>
+    <div class="l3-stats">
+      <div class="l3-stat"><div class="l3-val">.667</div><div class="l3-lbl">AVG</div></div>
+      <div class="l3-stat"><div class="l3-val">1</div><div class="l3-lbl">R</div></div>
+      <div class="l3-stat"><div class="l3-val">2</div><div class="l3-lbl">RBI</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="player-name">Orion Mitchell</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span class="trend" style="color:#ef4444">▼</span>
+      <div>
+        <div style="font-size:11px;color:#64748b">L3 OPS</div>
+        <div style="font-size:18px;font-weight:800;color:#38bdf8">1.417</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:11px;color:#64748b">Season</div>
+        <div style="font-size:13px;color:#94a3b8">2.083</div>
+      </div>
+    </div>
+    <div class="l3-stats">
+      <div class="l3-stat"><div class="l3-val">.667</div><div class="l3-lbl">AVG</div></div>
+      <div class="l3-stat"><div class="l3-val">4</div><div class="l3-lbl">R</div></div>
+      <div class="l3-stat"><div class="l3-val">2</div><div class="l3-lbl">RBI</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="player-name">Roland Meyer</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span class="trend" style="color:#ef4444">▼</span>
+      <div>
+        <div style="font-size:11px;color:#64748b">L3 OPS</div>
+        <div style="font-size:18px;font-weight:800;color:#38bdf8">1.333</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:11px;color:#64748b">Season</div>
+        <div style="font-size:13px;color:#94a3b8">1.667</div>
+      </div>
+    </div>
+    <div class="l3-stats">
+      <div class="l3-stat"><div class="l3-val">.667</div><div class="l3-lbl">AVG</div></div>
+      <div class="l3-stat"><div class="l3-val">0</div><div class="l3-lbl">R</div></div>
+      <div class="l3-stat"><div class="l3-val">2</div><div class="l3-lbl">RBI</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="player-name">Jordan Cerda-Zein</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span class="trend" style="color:#facc15">●</span>
+      <div>
+        <div style="font-size:11px;color:#64748b">L3 OPS</div>
+        <div style="font-size:18px;font-weight:800;color:#38bdf8">.833</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:11px;color:#64748b">Season</div>
+        <div style="font-size:13px;color:#94a3b8">.833</div>
+      </div>
+    </div>
+    <div class="l3-stats">
+      <div class="l3-stat"><div class="l3-val">.333</div><div class="l3-lbl">AVG</div></div>
+      <div class="l3-stat"><div class="l3-val">0</div><div class="l3-lbl">R</div></div>
+      <div class="l3-stat"><div class="l3-val">1</div><div class="l3-lbl">RBI</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="player-name">Jonah Lee</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span class="trend" style="color:#facc15">●</span>
+      <div>
+        <div style="font-size:11px;color:#64748b">L3 OPS</div>
+        <div style="font-size:18px;font-weight:800;color:#38bdf8">.667</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:11px;color:#64748b">Season</div>
+        <div style="font-size:13px;color:#94a3b8">.667</div>
+      </div>
+    </div>
+    <div class="l3-stats">
+      <div class="l3-stat"><div class="l3-val">.000</div><div class="l3-lbl">AVG</div></div>
+      <div class="l3-stat"><div class="l3-val">1</div><div class="l3-lbl">R</div></div>
+      <div class="l3-stat"><div class="l3-val">1</div><div class="l3-lbl">RBI</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="player-name">Colton Dignon</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span class="trend" style="color:#ef4444">▼</span>
+      <div>
+        <div style="font-size:11px;color:#64748b">L3 OPS</div>
+        <div style="font-size:18px;font-weight:800;color:#38bdf8">.500</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:11px;color:#64748b">Season</div>
+        <div style="font-size:13px;color:#94a3b8">.750</div>
+      </div>
+    </div>
+    <div class="l3-stats">
+      <div class="l3-stat"><div class="l3-val">.250</div><div class="l3-lbl">AVG</div></div>
+      <div class="l3-stat"><div class="l3-val">1</div><div class="l3-lbl">R</div></div>
+      <div class="l3-stat"><div class="l3-val">0</div><div class="l3-lbl">RBI</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="player-name">Huston Garvine</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span class="trend" style="color:#facc15">●</span>
+      <div>
+        <div style="font-size:11px;color:#64748b">L3 OPS</div>
+        <div style="font-size:18px;font-weight:800;color:#38bdf8">.000</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:11px;color:#64748b">Season</div>
+        <div style="font-size:13px;color:#94a3b8">.000</div>
+      </div>
+    </div>
+    <div class="l3-stats">
+      <div class="l3-stat"><div class="l3-val">.000</div><div class="l3-lbl">AVG</div></div>
+      <div class="l3-stat"><div class="l3-val">0</div><div class="l3-lbl">R</div></div>
+      <div class="l3-stat"><div class="l3-val">0</div><div class="l3-lbl">RBI</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="player-name">Kai Lin</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span class="trend" style="color:#facc15">●</span>
+      <div>
+        <div style="font-size:11px;color:#64748b">L3 OPS</div>
+        <div style="font-size:18px;font-weight:800;color:#38bdf8">.000</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:11px;color:#64748b">Season</div>
+        <div style="font-size:13px;color:#94a3b8">.000</div>
+      </div>
+    </div>
+    <div class="l3-stats">
+      <div class="l3-stat"><div class="l3-val">.000</div><div class="l3-lbl">AVG</div></div>
+      <div class="l3-stat"><div class="l3-val">0</div><div class="l3-lbl">R</div></div>
+      <div class="l3-stat"><div class="l3-val">1</div><div class="l3-lbl">RBI</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- GAME LOG -->
+<div class="section-title">📋 Game Log</div>
+<div class="game-row">
+  <span class="result W">W</span>
+  <span class="score">20–8</span>
+  <span class="opp">vs Crabs 12U · TBD</span>
+  <span>2026-06-03</span>
+  <span class="round">Scrimmage</span>
+</div>
+</div>
+
+<div class="footer">2026 Alameda 12u All-Stars · Generated June 03, 2026 · 1 games</div>
+</body></html>
