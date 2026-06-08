@@ -1,13 +1,13 @@
 """
 2026 Alameda 12u All-Stars
-Opponent: Crabs 12U
-Date:     06/03
+Opponent: Palo Alto LL 12U
+Date:     06/02
 Round:    Scrimmage
 Result:   W  20-8
 Field:    TBD
 """
 TEAM = "Alameda"
-DATE = "2026-06-03"
+DATE = "2026-06-02"
 
 hitting = [
     {"name": "H Garvi... #20",  "ab": 4, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0},

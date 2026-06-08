@@ -8,8 +8,17 @@
 
 GAMES = [
     # ── Scrimmages ─────────────────────────────────────────────────────────
-    {"date": "2026-06-03", "away": "Alameda", "home": "Crabs 12U",
+    {"date": "2026-06-02", "away": "Alameda", "home": "Palo Alto LL 12U",
      "away_score": 20, "home_score": 8, "winner": "Alameda",
+     "field": "TBD", "round": "Scrimmage"},
+    {"date": "2026-06-04", "away": "Alameda", "home": "Danville LL 12U",
+     "away_score": 3, "home_score": 4, "winner": "Danville LL 12U",
+     "field": "Danville", "round": "Scrimmage"},
+    {"date": "2026-06-06", "away": "Alameda", "home": "San Ramon Valley LL 12U",
+     "away_score": 3, "home_score": 8, "winner": "San Ramon Valley LL 12U",
+     "field": "TBD", "round": "Scrimmage"},
+    {"date": "2026-06-06", "away": "Alameda", "home": "San Ramon Valley LL 12U",
+     "away_score": 6, "home_score": 16, "winner": "San Ramon Valley LL 12U",
      "field": "TBD", "round": "Scrimmage"},
 
     # ── Districts ──────────────────────────────────────────────────────────

@@ -12,7 +12,7 @@ echo "▶ Copying dashboard.html → index.html..."
 cp dashboard.html index.html
 
 echo "▶ Pushing to GitHub..."
-git add index.html dashboard.html
+git add -A
 git commit -m "Update dashboard — $(date '+%Y-%m-%d')"
 git push
 
