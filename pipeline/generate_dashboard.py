@@ -170,11 +170,16 @@ def batting_line(t):
     bbpct=(bb/pa*100) if pa>0 else 0
     kpct=(so/pa*100) if pa>0 else 0
     gp=len(set(t['games']))
+    # QAB — partial count: H, BB, HBP are always distinct qualifying PAs;
+    # RBIs on outs estimated as max(0, rbi − h − bb − hbp)
+    rbi=t['rbi']
+    qab = h + bb + hbp + max(0, rbi - h - bb - hbp)
+    qab_pct = qab/pa if pa>0 else 0
     return dict(gp=gp,pa=pa,ab=ab,h=h,avg=avg,obp=obp,slg=slg,ops=ops,iso=iso,
-                r=t['r'],rbi=t['rbi'],bb=bb,hbp=hbp,so=so,sb=sb,cs=cs,
+                r=t['r'],rbi=rbi,bb=bb,hbp=hbp,so=so,sb=sb,cs=cs,
                 sbpct=sbpct,bbpct=bbpct,kpct=kpct,
                 doubles=t['doubles'],triples=t['triples'],hr=t['hr'],
-                tb=tb,xbh=xbh,e=t['e'])
+                tb=tb,xbh=xbh,e=t['e'],qab=qab,qab_pct=qab_pct)
 
 def pitching_line(t):
     ip=t['ip']
@@ -289,6 +294,35 @@ def avail_badge(status, elig_date=''):
         label = elig_date if elig_date else ('TOMORROW' if status == 'soon' else 'RESTING')
     c = colors.get(status, '#888')
     return f'<span style="background:{c};color:#000;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">{label}</span>'
+
+# ── pQAB table rows ──────────────────────────────────────────────────────────
+def _pqab_cls(pct_val):
+    if pct_val >= .65: return 'hi'
+    if pct_val >= .55: return 'med'
+    return 'lo'
+
+pqab_rows_html = ''
+team_pa_total = team_qab_total = 0
+for p in sorted(players, key=lambda x: -x['batting']['qab_pct']):
+    b = p['batting']
+    team_pa_total  += b['pa']
+    team_qab_total += b['qab']
+    pqab_rows_html += (
+        f'<tr><td class="name">{p["full"]}</td>'
+        f'<td>{b["pa"]}</td><td>{b["h"]}</td><td>{b["bb"]}</td><td>{b["hbp"]}</td>'
+        f'<td class="{_pqab_cls(b["qab_pct"])}">{b["qab"]}</td>'
+        f'<td class="{_pqab_cls(b["qab_pct"])}">{b["qab_pct"]:.1%}</td>'
+        f'</tr>\n'
+    )
+team_qab_pct = team_qab_total / team_pa_total if team_pa_total > 0 else 0
+pqab_rows_html += (
+    f'<tr style="font-weight:700;border-top:2px solid #334155">'
+    f'<td class="name">TEAM</td>'
+    f'<td>{team_pa_total}</td><td></td><td></td><td></td>'
+    f'<td class="{_pqab_cls(team_qab_pct)}">{team_qab_total}</td>'
+    f'<td class="{_pqab_cls(team_qab_pct)}">{team_qab_pct:.1%}</td>'
+    f'</tr>\n'
+)
 
 GENERATED = date.today().strftime('%B %d, %Y')
 NUM_GAMES = len(GAMES)
@@ -474,7 +508,34 @@ for p in sorted(players, key=lambda x: -x['batting']['ops']):
   <td>{pct(b['sbpct'],0)}</td>
 </tr>"""
 
-html += """</tbody></table></div>
+html += f"""</tbody></table></div>
+
+<!-- pQAB -->
+<div class="section-title">✅ Quality At Bats (pQAB)</div>
+<div style="background:#172554;border:1px solid #1e40af;border-radius:8px;padding:12px 16px;margin-bottom:14px">
+  <div style="font-weight:700;color:#93c5fd;font-size:12px;margin-bottom:4px">ℹ️ Partial QAB Count — Data Limitations Apply</div>
+  <div style="color:#94a3b8;font-size:11px;line-height:1.6">
+    <b style="color:#e2e8f0">pQAB</b> counts plate appearances where the batter recorded a <b style="color:#e2e8f0">Hit, Walk, HBP, or RBI on an out</b>.
+    Criteria we <em>cannot</em> track from scoresheets: hard-hit balls, sac flies/bunts, runner advancement, 8+ pitch ABs, 4+ pitches after 0-2.
+    True QAB% will be higher than shown. Benchmark: 55–65% is good for 12U travel ball.
+  </div>
+</div>
+<div class="tbl-wrap"><table>
+<thead>
+<tr class="th-group">
+  <th class="left" colspan="1"></th>
+  <th colspan="4">QUALIFYING OUTCOMES (TRACKED)</th>
+  <th colspan="2">pQAB</th>
+</tr>
+<tr>
+  <th class="left">Player</th>
+  <th>PA</th><th>H</th><th>BB</th><th>HBP</th>
+  <th>pQAB</th><th>pQAB%</th>
+</tr>
+</thead><tbody>
+{pqab_rows_html}
+</tbody></table></div>
+<!-- END pQAB -->
 
 <!-- PITCHING -->
 <div class="section-title">⚾ Pitching</div>
