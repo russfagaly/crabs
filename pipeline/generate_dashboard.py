@@ -297,8 +297,8 @@ def avail_badge(status, elig_date=''):
 
 # ── pQAB table rows ──────────────────────────────────────────────────────────
 def _pqab_cls(pct_val):
-    if pct_val >= .65: return 'hi'
-    if pct_val >= .55: return 'med'
+    if pct_val >= .55: return 'hi'   # elite for 12U travel
+    if pct_val >= .40: return 'med'  # average for 12U travel
     return 'lo'
 
 pqab_rows_html = ''
@@ -517,7 +517,7 @@ html += f"""</tbody></table></div>
   <div style="color:#94a3b8;font-size:11px;line-height:1.6">
     <b style="color:#e2e8f0">pQAB</b> counts plate appearances where the batter recorded a <b style="color:#e2e8f0">Hit, Walk, HBP, or RBI on an out</b>.
     Criteria we <em>cannot</em> track from scoresheets: hard-hit balls, sac flies/bunts, runner advancement, 8+ pitch ABs, 4+ pitches after 0-2.
-    True QAB% will be higher than shown. Benchmark: 55–65% is good for 12U travel ball.
+    True QAB% will be higher than shown. Per baseballmode.com: average is 40–50% at 12U travel ball; 55%+ is elite.
   </div>
 </div>
 <div class="tbl-wrap"><table>
