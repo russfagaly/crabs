@@ -20,6 +20,9 @@ GAMES = [
     {"date": "2026-06-06", "away": "Alameda", "home": "San Ramon Valley LL 12U",
      "away_score": 6, "home_score": 16, "winner": "San Ramon Valley LL 12U",
      "field": "TBD", "round": "Scrimmage"},
+    {"date": "2026-06-09", "away": "Alameda", "home": "Castro Valley LL 12U",
+     "away_score": 10, "home_score": 3, "winner": "Alameda",
+     "field": "TBD", "round": "Scrimmage"},
 
     # ── Districts ──────────────────────────────────────────────────────────
     # {"date": "2026-07-XX", "away": "Alameda", "home": "Opponent",
