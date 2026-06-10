@@ -88,12 +88,12 @@ def display_name(full_name):
 
 h_totals = defaultdict(lambda: {
     'ab':0,'h':0,'bb':0,'hbp':0,'r':0,'rbi':0,
-    'sb':0,'cs':0,'so':0,'doubles':0,'triples':0,'hr':0,'e':0,'games':[]
+    'sb':0,'cs':0,'so':0,'doubles':0,'triples':0,'hr':0,'e':0,'pqab_bonus':0,'games':[]
 })
 for row in all_hitting:
     key = display_name(row['name'])
     t   = h_totals[key]
-    for f in ['ab','h','bb','hbp','r','rbi','sb','cs','so','doubles','triples','hr','e']:
+    for f in ['ab','h','bb','hbp','r','rbi','sb','cs','so','doubles','triples','hr','e','pqab_bonus']:
         t[f] += row.get(f, 0)
     t['games'].append(row['game_id'])
 
@@ -182,15 +182,18 @@ def batting_line(t):
     kpct=(so/pa*100) if pa>0 else 0
     gp=len(set(t['games']))
     # QAB — partial count: H, BB, HBP are always distinct qualifying PAs;
-    # RBIs on outs estimated as max(0, rbi − h − bb − hbp)
+    # RBIs on outs estimated as max(0, rbi − h − bb − hbp);
+    # pqab_bonus adds hard-hit-ball outs (line drives / hard grounders & fly balls)
+    # identified from play-by-play logs, where available.
     rbi=t['rbi']
-    qab = h + bb + hbp + max(0, rbi - h - bb - hbp)
+    pqab_bonus = t.get('pqab_bonus', 0)
+    qab = min(pa, h + bb + hbp + max(0, rbi - h - bb - hbp) + pqab_bonus)
     qab_pct = qab/pa if pa>0 else 0
     return dict(gp=gp,pa=pa,ab=ab,h=h,avg=avg,obp=obp,slg=slg,ops=ops,iso=iso,
                 r=t['r'],rbi=rbi,bb=bb,hbp=hbp,so=so,sb=sb,cs=cs,
                 sbpct=sbpct,bbpct=bbpct,kpct=kpct,
                 doubles=t['doubles'],triples=t['triples'],hr=t['hr'],
-                tb=tb,xbh=xbh,e=t['e'],qab=qab,qab_pct=qab_pct)
+                tb=tb,xbh=xbh,e=t['e'],qab=qab,qab_pct=qab_pct,pqab_bonus=pqab_bonus)
 
 FIP_CONSTANT = 3.10  # standard-ish constant; not league-calibrated for 12U
 
@@ -237,7 +240,7 @@ players = []
 for p in ROSTER:
     short = p['short']
     ht    = h_totals.get(short, {})
-    ht_d  = {k: ht.get(k,0) for k in ['ab','h','bb','hbp','r','rbi','sb','cs','so','doubles','triples','hr','e']}
+    ht_d  = {k: ht.get(k,0) for k in ['ab','h','bb','hbp','r','rbi','sb','cs','so','doubles','triples','hr','e','pqab_bonus']}
     ht_d['games'] = ht.get('games',[])
     bl   = batting_line(ht_d)
     pt   = p_totals.get(short, {})
@@ -328,7 +331,7 @@ for p in sorted(players, key=lambda x: -x['batting']['qab_pct']):
     team_qab_total += b['qab']
     pqab_rows_html += (
         f'<tr><td class="name">{p["full"]}</td>'
-        f'<td>{b["pa"]}</td><td>{b["h"]}</td><td>{b["bb"]}</td><td>{b["hbp"]}</td>'
+        f'<td>{b["pa"]}</td><td>{b["h"]}</td><td>{b["bb"]}</td><td>{b["hbp"]}</td><td>{b["pqab_bonus"]}</td>'
         f'<td class="{_pqab_cls(b["qab_pct"])}">{b["qab"]}</td>'
         f'<td class="{_pqab_cls(b["qab_pct"])}">{b["qab_pct"]:.1%}</td>'
         f'</tr>\n'
@@ -337,7 +340,7 @@ team_qab_pct = team_qab_total / team_pa_total if team_pa_total > 0 else 0
 pqab_rows_html += (
     f'<tr style="font-weight:700;border-top:2px solid #334155">'
     f'<td class="name">TEAM</td>'
-    f'<td>{team_pa_total}</td><td></td><td></td><td></td>'
+    f'<td>{team_pa_total}</td><td></td><td></td><td></td><td></td>'
     f'<td class="{_pqab_cls(team_qab_pct)}">{team_qab_total}</td>'
     f'<td class="{_pqab_cls(team_qab_pct)}">{team_qab_pct:.1%}</td>'
     f'</tr>\n'
@@ -561,21 +564,23 @@ html += f"""</tbody></table></div>
 <div style="background:#172554;border:1px solid #1e40af;border-radius:8px;padding:12px 16px;margin-bottom:14px">
   <div style="font-weight:700;color:#93c5fd;font-size:12px;margin-bottom:4px">ℹ️ Partial QAB Count — Data Limitations Apply</div>
   <div style="color:#94a3b8;font-size:11px;line-height:1.6">
-    <b style="color:#e2e8f0">pQAB</b> counts plate appearances where the batter recorded a <b style="color:#e2e8f0">Hit, Walk, HBP, or RBI on an out</b>.
-    Criteria we <em>cannot</em> track from scoresheets: hard-hit balls, sac flies/bunts, runner advancement, 8+ pitch ABs, 4+ pitches after 0-2.
-    True QAB% will be higher than shown. Per baseballmode.com: average is 40–50% at 12U travel ball; 55%+ is elite.
+    <b style="color:#e2e8f0">pQAB</b> counts plate appearances where the batter recorded a <b style="color:#e2e8f0">Hit, Walk, HBP, RBI on an out, or a Hard-Hit Out</b>
+    (line drive or hard-hit ground/fly ball, even when caught — from play-by-play logs where available).
+    Criteria still <em>not</em> tracked: sac bunts, runner advancement to scoring position with &lt;2 outs, 8+ pitch ABs, 4+ pitches after an 0-2 count
+    (none have occurred yet this season). True QAB% may still run slightly higher than shown.
+    Per baseballmode.com: average is 40–50% at 12U travel ball; 55%+ is elite.
   </div>
 </div>
 <div class="tbl-wrap"><table>
 <thead>
 <tr class="th-group">
   <th class="left" colspan="1"></th>
-  <th colspan="4">QUALIFYING OUTCOMES (TRACKED)</th>
+  <th colspan="5">QUALIFYING OUTCOMES (TRACKED)</th>
   <th colspan="2">pQAB</th>
 </tr>
 <tr>
   <th class="left">Player</th>
-  <th>PA</th><th>H</th><th>BB</th><th>HBP</th>
+  <th>PA</th><th>H</th><th>BB</th><th>HBP</th><th>HH Out</th>
   <th>pQAB</th><th>pQAB%</th>
 </tr>
 </thead><tbody>

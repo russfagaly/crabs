@@ -10,18 +10,18 @@ TEAM = "Alameda"
 DATE = "2026-06-04"
 
 hitting = [
-    {"name": "J Lee #24",       "ab": 2, "r": 0, "h": 1, "rbi": 0, "bb": 1, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0},
-    {"name": "N Yuen #17",      "ab": 2, "r": 0, "h": 0, "rbi": 1, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 1},
-    {"name": "K Lin #11",       "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 1, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0},
-    {"name": "R Meyer #99",     "ab": 3, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0},
-    {"name": "H Garvi... #20",  "ab": 3, "r": 1, "h": 1, "rbi": 0, "bb": 0, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0},
-    {"name": "C Dignon #19",    "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 1, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0},
-    {"name": "A Romero #6",     "ab": 3, "r": 0, "h": 2, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0},
-    {"name": "K Ponte... #10",  "ab": 2, "r": 0, "h": 1, "rbi": 0, "bb": 1, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0},
-    {"name": "O Mitchell #13",  "ab": 1, "r": 0, "h": 1, "rbi": 1, "bb": 2, "so": 0, "doubles": 1, "triples": 0, "hr": 0, "sb": 0, "cs": 1, "e": 0, "hbp": 0},
-    {"name": "R Fagaly #22",    "ab": 3, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 3, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0},
-    {"name": "J Cerda... #3",   "ab": 3, "r": 1, "h": 1, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0},
-    {"name": "D Bryant #4",     "ab": 2, "r": 1, "h": 0, "rbi": 0, "bb": 1, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 1, "cs": 1, "e": 0, "hbp": 0},
+    {"name": "J Lee #24",       "ab": 2, "r": 0, "h": 1, "rbi": 0, "bb": 1, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 1},
+    {"name": "N Yuen #17",      "ab": 2, "r": 0, "h": 0, "rbi": 1, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 1, "pqab_bonus": 1},
+    {"name": "K Lin #11",       "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 1, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
+    {"name": "R Meyer #99",     "ab": 3, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
+    {"name": "H Garvi... #20",  "ab": 3, "r": 1, "h": 1, "rbi": 0, "bb": 0, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
+    {"name": "C Dignon #19",    "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 1, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
+    {"name": "A Romero #6",     "ab": 3, "r": 0, "h": 2, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 1},
+    {"name": "K Ponte... #10",  "ab": 2, "r": 0, "h": 1, "rbi": 0, "bb": 1, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
+    {"name": "O Mitchell #13",  "ab": 1, "r": 0, "h": 1, "rbi": 1, "bb": 2, "so": 0, "doubles": 1, "triples": 0, "hr": 0, "sb": 0, "cs": 1, "e": 0, "hbp": 0, "pqab_bonus": 0},
+    {"name": "R Fagaly #22",    "ab": 3, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 3, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
+    {"name": "J Cerda... #3",   "ab": 3, "r": 1, "h": 1, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 1},
+    {"name": "D Bryant #4",     "ab": 2, "r": 1, "h": 0, "rbi": 0, "bb": 1, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 1, "cs": 1, "e": 0, "hbp": 0, "pqab_bonus": 0},
 ]
 
 pitching = [
