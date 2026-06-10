@@ -118,7 +118,7 @@ for row in all_hitting:
         player_game_log[key][gid][f] += row.get(f, 0)
 
 p_totals = defaultdict(lambda: {
-    'ip':0.,'so':0,'bb':0,'h':0,'er':0,'r':0,
+    'ip':0.,'so':0,'bb':0,'h':0,'er':0,'r':0,'hr':0,
     'bf':0,'hbp':0,'pitches':0,'strikes':0,'apps':0,
     'last_pitched':None,'last_pitches':0,'last_date':None,
     'outings':[]
@@ -133,6 +133,7 @@ for row in all_pitching:
     t['h']       += row.get('h',  0)
     t['er']      += row.get('er', 0)
     t['r']       += row.get('r',  0)
+    t['hr']      += row.get('hr', 0)
     t['bf']      += row.get('bf', 0)
     t['hbp']     += row.get('hbp',0)
     t['pitches'] += row.get('pitches', 0)
@@ -191,6 +192,8 @@ def batting_line(t):
                 doubles=t['doubles'],triples=t['triples'],hr=t['hr'],
                 tb=tb,xbh=xbh,e=t['e'],qab=qab,qab_pct=qab_pct)
 
+FIP_CONSTANT = 3.10  # standard-ish constant; not league-calibrated for 12U
+
 def pitching_line(t):
     ip=t['ip']
     if ip==0: return None
@@ -198,9 +201,10 @@ def pitching_line(t):
     baa_d=t['bf']-t['bb']-t['hbp']; baa=t['h']/baa_d if baa_d>0 else 0
     spct=t['strikes']/t['pitches'] if t['pitches']>0 else 0
     kbb=t['so']/t['bb'] if t['bb']>0 else None
+    fip=(13*t['hr'] + 3*(t['bb']+t['hbp']) - 2*t['so'])/ip + FIP_CONSTANT
     return dict(apps=t['apps'],ip=ip_disp(ip),ip_d=ip,
-                k=t['so'],bb=t['bb'],h=t['h'],r=t['r'],er=t['er'],hbp=t['hbp'],
-                era=era,whip=whip,kip=kip,baa=baa,spct=spct,kbb=kbb,
+                k=t['so'],bb=t['bb'],h=t['h'],r=t['r'],er=t['er'],hbp=t['hbp'],hr=t['hr'],
+                era=era,whip=whip,kip=kip,baa=baa,spct=spct,kbb=kbb,fip=fip,
                 pitches=t['pitches'],last_pc=t['last_pitches'],last_date=t['last_date'],
                 outings=t['outings'])
 
@@ -599,14 +603,14 @@ html += f"""</tbody></table></div>
 <thead>
 <tr class="th-group">
   <th class="left" colspan="2"></th>
-  <th colspan="7">STATS</th>
-  <th colspan="6">RATES</th>
+  <th colspan="8">STATS</th>
+  <th colspan="7">RATES</th>
   <th colspan="2">PITCHING DATA</th>
 </tr>
 <tr>
   <th class="left">Player</th><th>App</th>
-  <th>IP</th><th>H</th><th>R</th><th>ER</th><th>BB</th><th>K</th><th>HBP</th>
-  <th>ERA</th><th>WHIP</th><th>K/IP</th><th>K/BB</th><th>BAA</th><th>Strike%</th>
+  <th>IP</th><th>H</th><th>R</th><th>ER</th><th>HR</th><th>BB</th><th>K</th><th>HBP</th>
+  <th>ERA</th><th>WHIP</th><th>FIP</th><th>K/IP</th><th>K/BB</th><th>BAA</th><th>Strike%</th>
   <th>Total P</th><th>Last PC</th>
 </tr>
 </thead><tbody>
@@ -626,12 +630,13 @@ for p, pl in pit_players:
     kbb_s = fmt(pl['kbb'],2) if pl['kbb'] else '—'
     html += f"""<tr>
   <td class="name">{p['full']}</td><td>{pl['apps']}</td>
-  <td>{pl['ip']}</td><td>{pl['h']}</td><td>{pl['r']}</td><td>{pl['er']}</td>
+  <td>{pl['ip']}</td><td>{pl['h']}</td><td>{pl['r']}</td><td>{pl['er']}</td><td>{pl['hr']}</td>
   <td>{pl['bb']}</td>
   <td class="{pcls(pl['kip'],1.5,1.0)}">{pl['k']}</td>
   <td>{pl['hbp']}</td>
   <td class="{pcls(pl['era'],3.0,6.0,flip=True)}">{fmt_lz(pl['era'],2)}</td>
   <td class="{pcls(pl['whip'],1.2,1.8,flip=True)}">{fmt_lz(pl['whip'],2)}</td>
+  <td class="{pcls(pl['fip'],3.5,5.5,flip=True)}">{fmt_lz(pl['fip'],2)}</td>
   <td class="{pcls(pl['kip'],1.5,1.0)}">{fmt(pl['kip'],2)}</td>
   <td class="{pcls(float(pl['kbb']) if pl['kbb'] else 0,3.0,1.5)}">{kbb_s}</td>
   <td class="{pcls(pl['baa'],.200,.300,flip=True)}">{fmt(pl['baa'])}</td>

@@ -28,7 +28,7 @@ hitting = [
 
 pitching = [
     # {"name": "First L #N", "ip": "0.0", "h": 0, "r": 0, "er": 0, "bb": 0, "so": 0,
-    #  "pitches": 0, "strikes": 0, "bf": 0, "hbp": 0},
+    #  "pitches": 0, "strikes": 0, "bf": 0, "hbp": 0, "hr": 0},
 ]
 
 # ── CHECKLIST (delete before saving) ─────────────────────────────────────────
@@ -36,6 +36,7 @@ pitching = [
 # [ ] All lineup players are in hitting list
 # [ ] All pitchers are in pitching list
 # [ ] Doubles + triples + hr ≤ h for every hitter
+# [ ] hr (home runs allowed) set for each pitcher — used for FIP
 # [ ] IP uses correct thirds notation (.0, .1, .2 only — never .3)
 # [ ] Team hit total matches sum of individual h values
 # [ ] Results.py updated with this game's score

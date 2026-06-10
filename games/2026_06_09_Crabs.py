@@ -24,8 +24,8 @@ hitting = [
 ]
 
 pitching = [
-    {"name": "R Fagaly #22",    "ip": "2.0", "h": 0, "r": 0, "er": 0, "bb": 1, "so": 1, "pitches": 19, "strikes":  9, "bf": 7, "hbp": 0},
-    {"name": "O Mitchell #13",  "ip": "2.0", "h": 1, "r": 0, "er": 0, "bb": 1, "so": 4, "pitches": 33, "strikes": 18, "bf": 8, "hbp": 0},
-    {"name": "N Yuen #17",      "ip": "1.0", "h": 1, "r": 1, "er": 1, "bb": 0, "so": 0, "pitches": 10, "strikes":  7, "bf": 4, "hbp": 0},
-    {"name": "K Lin #11",       "ip": "1.0", "h": 3, "r": 2, "er": 1, "bb": 0, "so": 1, "pitches": 13, "strikes": 11, "bf": 6, "hbp": 0},
+    {"name": "R Fagaly #22",    "ip": "2.0", "h": 0, "r": 0, "er": 0, "bb": 1, "so": 1, "pitches": 19, "strikes":  9, "bf": 7, "hbp": 0, "hr": 0},
+    {"name": "O Mitchell #13",  "ip": "2.0", "h": 1, "r": 0, "er": 0, "bb": 1, "so": 4, "pitches": 33, "strikes": 18, "bf": 8, "hbp": 0, "hr": 0},
+    {"name": "N Yuen #17",      "ip": "1.0", "h": 1, "r": 1, "er": 1, "bb": 0, "so": 0, "pitches": 10, "strikes":  7, "bf": 4, "hbp": 0, "hr": 0},
+    {"name": "K Lin #11",       "ip": "1.0", "h": 3, "r": 2, "er": 1, "bb": 0, "so": 1, "pitches": 13, "strikes": 11, "bf": 6, "hbp": 0, "hr": 0},
 ]
