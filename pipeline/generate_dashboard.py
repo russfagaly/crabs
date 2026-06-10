@@ -292,6 +292,11 @@ def fmt(val, decimals=3):
         return s.lstrip('0') or '0'
     return str(val)
 
+def fmt_lz(val, decimals=2):
+    """Format a float keeping the leading zero (e.g. ERA, WHIP)."""
+    if val is None: return '—'
+    return f"{val:.{decimals}f}"
+
 def pct(val, dec=1):
     if val is None: return '—'
     return f"{val:.{dec}f}%"
@@ -625,8 +630,8 @@ for p, pl in pit_players:
   <td>{pl['bb']}</td>
   <td class="{pcls(pl['kip'],1.5,1.0)}">{pl['k']}</td>
   <td>{pl['hbp']}</td>
-  <td class="{pcls(pl['era'],3.0,6.0,flip=True)}">{fmt(pl['era'],2)}</td>
-  <td class="{pcls(pl['whip'],1.2,1.8,flip=True)}">{fmt(pl['whip'],2)}</td>
+  <td class="{pcls(pl['era'],3.0,6.0,flip=True)}">{fmt_lz(pl['era'],2)}</td>
+  <td class="{pcls(pl['whip'],1.2,1.8,flip=True)}">{fmt_lz(pl['whip'],2)}</td>
   <td class="{pcls(pl['kip'],1.5,1.0)}">{fmt(pl['kip'],2)}</td>
   <td class="{pcls(float(pl['kbb']) if pl['kbb'] else 0,3.0,1.5)}">{kbb_s}</td>
   <td class="{pcls(pl['baa'],.200,.300,flip=True)}">{fmt(pl['baa'])}</td>
