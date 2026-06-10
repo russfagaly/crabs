@@ -12,7 +12,8 @@ Output: dashboard.html (open in any browser, works on mobile)
 
 import sys, os, glob, importlib.util
 from collections import defaultdict
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
+from zoneinfo import ZoneInfo
 
 sys.path.insert(0, os.path.dirname(__file__))
 from roster import ROSTER
@@ -373,7 +374,8 @@ for p in sorted(players, key=lambda x: x['full']):
             lineup_rows_html += f'<td class="lo">HBP×{d["hbp"]}</td>'
     lineup_rows_html += '</tr>\n'
 
-GENERATED = date.today().strftime('%B %d, %Y')
+_now_pt = datetime.now(ZoneInfo("America/Los_Angeles"))
+GENERATED = _now_pt.strftime('%B %d, %Y, %-I:%M %p PT')
 NUM_GAMES = len(GAMES)
 
 # ── HTML ──────────────────────────────────────────────────────────────────────
