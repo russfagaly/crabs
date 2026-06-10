@@ -24,7 +24,7 @@ hitting = [
 
 pitching = [
     {"name": "O Mitchell #13",  "ip": "2.0", "h": 4,  "r": 4,  "er": 3,  "bb": 3, "so": 3, "pitches": 47, "strikes": 27, "bf": 13, "hbp": 0, "hr": 0},
-    {"name": "J Cerda... #3",   "ip": "2.0", "h": 4,  "r": 4,  "er": 4,  "bb": 2, "so": 2, "pitches": 48, "strikes": 27, "bf": 12, "hbp": 0, "hr": 0},
+    {"name": "J Cerda... #3",   "ip": "2.0", "h": 4,  "r": 4,  "er": 4,  "bb": 2, "so": 2, "pitches": 48, "strikes": 27, "bf": 12, "hbp": 0, "hr": 1},
     {"name": "K Lin #11",       "ip": "1.0", "h": 5,  "r": 7,  "er": 7,  "bb": 2, "so": 1, "pitches": 39, "strikes": 21, "bf": 11, "hbp": 1, "hr": 0},
     {"name": "N Yuen #17",      "ip": "1.0", "h": 2,  "r": 1,  "er": 1,  "bb": 0, "so": 0, "pitches":  9, "strikes":  7, "bf":  5, "hbp": 0, "hr": 0},
 ]
