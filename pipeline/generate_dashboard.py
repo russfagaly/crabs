@@ -613,7 +613,7 @@ html += f"""</tbody></table></div>
 """
 
 pit_players = [(p, p['pitching']) for p in players if p['pitching']]
-pit_players.sort(key=lambda x: x[1]['era'])
+pit_players.sort(key=lambda x: -x[1]['ip_d'])
 for p, pl in pit_players:
     def pcls(val, good, ok, flip=False):
         if flip:
