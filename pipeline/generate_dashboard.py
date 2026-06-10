@@ -57,8 +57,8 @@ for path in sorted(glob.glob(os.path.join(game_dir, '*.py'))):
     date_str = getattr(mod, 'DATE', '')
     if date_str:
         game_ids.append((game_id, date_str))
-    for row in getattr(mod, 'hitting', []):
-        all_hitting.append({**row, 'game_id': game_id, 'date': date_str})
+    for idx, row in enumerate(getattr(mod, 'hitting', [])):
+        all_hitting.append({**row, 'game_id': game_id, 'date': date_str, 'lineup_pos': idx + 1})
     for row in getattr(mod, 'pitching', []):
         all_pitching.append({**row, 'game_id': game_id, 'date': date_str})
 
@@ -96,6 +96,16 @@ for row in all_hitting:
     for f in ['ab','h','bb','hbp','r','rbi','sb','cs','so','doubles','triples','hr','e']:
         t[f] += row.get(f, 0)
     t['games'].append(row['game_id'])
+
+# Per-batting-order-position totals: lineup_totals[short][pos] = {ab,h,bb,hbp}
+lineup_totals = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+max_lineup_pos = 0
+for row in all_hitting:
+    key = display_name(row['name'])
+    pos = row['lineup_pos']
+    max_lineup_pos = max(max_lineup_pos, pos)
+    for f in ['ab', 'h', 'bb', 'hbp']:
+        lineup_totals[key][pos][f] += row.get(f, 0)
 
 # Per-game hitting log per player
 player_game_log = defaultdict(dict)  # short -> {game_id -> stats}
@@ -324,6 +334,33 @@ pqab_rows_html += (
     f'</tr>\n'
 )
 
+# ── Lineup position heatmap ───────────────────────────────────────────────────
+def _lineup_cls(ab, h):
+    if ab == 0: return 'lo'
+    avg = h / ab
+    if avg >= .400: return 'hi'
+    if avg >= .300: return 'med'
+    return 'lo'
+
+lineup_header_html = ''.join(f'<th>{i}</th>' for i in range(1, max_lineup_pos + 1))
+
+lineup_rows_html = ''
+for p in sorted(players, key=lambda x: x['full']):
+    short = p['short']
+    lineup_rows_html += f'<tr><td class="name">{p["full"]}</td>'
+    for pos in range(1, max_lineup_pos + 1):
+        d = lineup_totals.get(short, {}).get(pos)
+        if not d or (d['ab'] == 0 and d['bb'] == 0 and d['hbp'] == 0):
+            lineup_rows_html += '<td class="dim">—</td>'
+        elif d['ab'] > 0:
+            cls = _lineup_cls(d['ab'], d['h'])
+            lineup_rows_html += f'<td class="{cls}">{d["h"]}-{d["ab"]}</td>'
+        elif d['bb'] > 0:
+            lineup_rows_html += f'<td class="lo">BB×{d["bb"]}</td>'
+        else:
+            lineup_rows_html += f'<td class="lo">HBP×{d["hbp"]}</td>'
+    lineup_rows_html += '</tr>\n'
+
 GENERATED = date.today().strftime('%B %d, %Y')
 NUM_GAMES = len(GAMES)
 
@@ -536,6 +573,20 @@ html += f"""</tbody></table></div>
 {pqab_rows_html}
 </tbody></table></div>
 <!-- END pQAB -->
+
+<!-- LINEUP POSITION HEATMAP -->
+<div class="section-title">🔢 Performance by Batting Order Position</div>
+<div style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:10px 16px;margin-bottom:14px;color:#94a3b8;font-size:11px;line-height:1.6">
+  H-AB totals across all games when a player batted in that lineup spot. Dashes mean the player never batted there.
+</div>
+<div class="tbl-wrap"><table>
+<thead><tr>
+  <th class="left">Player</th>
+  {lineup_header_html}
+</tr></thead><tbody>
+{lineup_rows_html}
+</tbody></table></div>
+<!-- END LINEUP HEATMAP -->
 
 <!-- PITCHING -->
 <div class="section-title">⚾ Pitching</div>
