@@ -8,6 +8,9 @@ set -e
 echo "▶ Regenerating dashboard..."
 python3 pipeline/generate_dashboard.py
 
+echo "▶ Regenerating per-game pages..."
+python3 pipeline/generate_game_pages.py
+
 echo "▶ Copying dashboard.html → index.html..."
 cp dashboard.html index.html
 

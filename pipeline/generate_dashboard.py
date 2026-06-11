@@ -18,6 +18,7 @@ from zoneinfo import ZoneInfo
 sys.path.insert(0, os.path.dirname(__file__))
 from roster import ROSTER
 from results import GAMES
+import theme
 
 # ── Little League pitch count rest rules ─────────────────────────────────────
 def rest_days_required(pitches):
@@ -70,6 +71,7 @@ _games_by_date = defaultdict(list)
 for g in GAMES:
     _games_by_date[g['date']].append(g)
 _date_idx = defaultdict(int)
+game_id_by_game = {}  # id(g) -> game_id, for linking Game Log rows to per-game pages
 for game_id, date_str in game_ids:
     idx = _date_idx[date_str]
     _date_idx[date_str] += 1
@@ -82,6 +84,7 @@ for game_id, date_str in game_ids:
         res  = 'W' if g['winner'] == 'Alameda' else 'L'
         game_log_by_id[game_id] = {'opp': opp, 'result': res, 'score': f"{us}-{them}",
                                     'round': g.get('round', ''), 'date': date_str}
+        game_id_by_game[id(g)] = game_id
 
 # ── Build per-player stats ────────────────────────────────────────────────────
 def display_name(full_name):
@@ -382,144 +385,12 @@ NUM_GAMES = len(GAMES)
 html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>2026 Alameda 12u All-Stars</title>
-<style>
-:root{{
-  --bg:#0f172a; --text:#e2e8f0; --text-strong:#f8fafc;
-  --text-muted:#94a3b8; --text-dim:#64748b; --text-faint:#475569; --text-faintest:#334155;
-  --border:#334155; --border-soft:#1e293b;
-  --surface:#1e293b; --surface-2:#131e30; --surface-3:#111a28; --surface-deep:#0f172a;
-  --th-group-bg:#0d1829;
-  --row-hover:#1e293b88; --row-hover-name:#1e3a5f;
-  --accent:#38bdf8; --green:#22c55e; --yellow:#facc15; --red:#ef4444;
-  --header-grad-1:#1e3a5f; --header-grad-2:#0f172a;
-  --info-bg:#172554; --info-border:#1e40af; --info-heading:#93c5fd;
-  --warn-bg:#422006; --warn-border:#92400e; --warn-heading:#fbbf24; --warn-text:#d97706;
-}}
-[data-theme="light"]{{
-  --bg:#f1f5f9; --text:#1e293b; --text-strong:#0f172a;
-  --text-muted:#64748b; --text-dim:#94a3b8; --text-faint:#94a3b8; --text-faintest:#cbd5e1;
-  --border:#cbd5e1; --border-soft:#e2e8f0;
-  --surface:#ffffff; --surface-2:#f8fafc; --surface-3:#f1f5f9; --surface-deep:#e2e8f0;
-  --th-group-bg:#e2e8f0;
-  --row-hover:#cbd5e166; --row-hover-name:#dbeafe;
-  --accent:#0284c7; --green:#16a34a; --yellow:#ca8a04; --red:#dc2626;
-  --header-grad-1:#cbd5e1; --header-grad-2:#f1f5f9;
-  --info-bg:#eff6ff; --info-border:#bfdbfe; --info-heading:#1d4ed8;
-  --warn-bg:#fffbeb; --warn-border:#fde68a; --warn-heading:#b45309; --warn-text:#92400e;
-}}
-*{{box-sizing:border-box;margin:0;padding:0}}
-html{{-webkit-text-size-adjust:100%}}
-body{{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Arial,sans-serif;font-size:14px;line-height:1.4;transition:background .15s,color .15s}}
-
-/* ── Header ── */
-.header{{position:relative;background:linear-gradient(135deg,var(--header-grad-1),var(--header-grad-2));padding:20px 16px;text-align:center;border-bottom:2px solid var(--border)}}
-.header h1{{font-size:clamp(17px,4vw,24px);font-weight:800;color:var(--text-strong);letter-spacing:1px}}
-.header .sub{{font-size:clamp(11px,2.5vw,13px);color:var(--text-muted);margin-top:4px}}
-.record{{display:flex;flex-wrap:wrap;gap:16px 24px;justify-content:center;margin-top:14px}}
-.record .stat{{text-align:center;min-width:60px}}
-.record .val{{font-size:clamp(20px,5vw,28px);font-weight:800;color:var(--accent)}}
-.record .lbl{{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px}}
-
-/* ── Theme toggle ── */
-#theme-toggle{{position:absolute;top:12px;right:12px;background:var(--surface);border:1px solid var(--border);
-  border-radius:20px;width:36px;height:36px;font-size:16px;cursor:pointer;display:flex;align-items:center;
-  justify-content:center;color:var(--text)}}
-#theme-toggle .sun{{display:none}}
-[data-theme="light"] #theme-toggle .sun{{display:inline}}
-[data-theme="light"] #theme-toggle .moon{{display:none}}
-
-/* ── Layout ── */
-.section{{padding:12px 12px 0;max-width:1200px;margin:0 auto}}
-.section-title{{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;
-  color:var(--text-muted);margin-bottom:10px;margin-top:20px;padding-bottom:6px;border-bottom:1px solid var(--border-soft)}}
-
-/* ── Tables ── */
-.tbl-wrap{{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:20px;
-  border-radius:8px;border:1px solid var(--border-soft)}}
-table{{width:100%;border-collapse:collapse;font-size:11px;white-space:nowrap}}
-th{{background:var(--surface);color:var(--text-muted);padding:7px 5px;text-align:center;
-   font-weight:600;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid var(--border)}}
-th.left{{text-align:left;padding-left:8px}}
-td{{padding:6px 5px;text-align:center;border-bottom:1px solid var(--surface-deep);color:var(--text)}}
-td.name{{text-align:left;padding-left:8px;font-weight:600;color:var(--text-strong);white-space:nowrap;
-  position:sticky;left:0;background:var(--surface-2);z-index:1}}
-tr:nth-child(even) td.name{{background:var(--surface-3)}}
-tr:hover td{{background:var(--row-hover)}}
-tr:hover td.name{{background:var(--row-hover-name)}}
-.hi{{color:var(--green);font-weight:700}}
-.med{{color:var(--yellow)}}
-.lo{{color:var(--text-muted)}}
-.bad{{color:var(--red);font-weight:700}}
-.dim{{color:var(--text-faintest)}}
-.th-group{{background:var(--th-group-bg);color:var(--text-faint);font-size:9px;letter-spacing:1px}}
-
-/* ── Cards ── */
-.cards{{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:20px}}
-.card{{background:var(--surface);border-radius:10px;padding:12px;border:1px solid var(--border)}}
-.card.available{{border-color:#22c55e44}}.card.soon{{border-color:#facc1544}}.card.unavailable{{border-color:#ef444444}}
-.card .player-name{{font-size:14px;font-weight:700;color:var(--text-strong);margin-bottom:6px}}
-.card .badge-row{{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}}
-.card .pc{{font-size:11px;color:var(--text-muted)}}
-.card .avail-msg{{font-size:10px;color:var(--text-dim);margin-top:3px}}
-.card .l3-stats{{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:8px}}
-.card .l3-stat{{text-align:center;background:var(--surface-deep);border-radius:6px;padding:5px 2px}}
-.card .l3-val{{font-size:15px;font-weight:700;color:var(--accent)}}
-.card .l3-lbl{{font-size:9px;color:var(--text-dim);text-transform:uppercase}}
-
-/* ── Game log ── */
-.game-row{{display:flex;align-items:center;gap:8px;padding:8px 10px;
-  background:var(--surface);border-radius:8px;margin-bottom:6px;font-size:13px;flex-wrap:wrap}}
-.game-row .result{{font-weight:800;font-size:14px;min-width:24px}}
-.game-row .result.W{{color:var(--green)}}.game-row .result.L{{color:var(--red)}}
-.game-row .score{{color:var(--accent);font-weight:700}}
-.game-row .opp{{color:var(--text-muted);flex:1;min-width:120px}}
-.game-row .round{{font-size:10px;color:var(--text-dim);background:var(--surface-deep);padding:2px 6px;border-radius:4px}}
-
-.footer{{text-align:center;padding:20px;font-size:11px;color:var(--text-faintest)}}
-.no-games{{text-align:center;padding:40px;color:var(--text-faint);font-size:14px}}
-.dnp{{color:var(--text-faintest);font-style:italic;font-size:10px}}
-
-/* ── Responsive breakpoints ── */
-@media(max-width:768px){{
-  .section{{padding:10px 8px 0}}
-  .cards{{grid-template-columns:1fr 1fr}}
-  table{{font-size:10px}}
-  th,td{{padding:5px 4px}}
-  .game-row{{font-size:12px}}
-}}
-@media(max-width:480px){{
-  .record{{gap:12px 16px}}
-  .cards{{grid-template-columns:1fr 1fr}}
-  .card{{padding:10px}}
-  .card .player-name{{font-size:13px}}
-  table{{font-size:10px}}
-  .section-title{{font-size:11px;letter-spacing:1px}}
-  .game-row .opp{{min-width:80px;font-size:11px}}
-}}
-</style>
-<script>
-(function(){{
-  var t = localStorage.getItem('crabs-theme');
-  if(!t){{ t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark'; }}
-  document.documentElement.setAttribute('data-theme', t);
-}})();
-function toggleTheme(){{
-  var html = document.documentElement;
-  var next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-  html.setAttribute('data-theme', next);
-  localStorage.setItem('crabs-theme', next);
-}}
-</script>
+{theme.head('2026 Alameda 12u All-Stars')}
 </head>
 <body>
 
 <div class="header">
-  <button id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">
-    <span class="moon">🌙</span><span class="sun">☀️</span>
-  </button>
+{theme.THEME_TOGGLE_BUTTON}
   <h1>2026 Alameda 12u All-Stars</h1>
   <div class="sub">Updated {GENERATED}</div>
   <div class="record">
@@ -837,13 +708,18 @@ else:
         opp  = g['home'] if g['away']=='Alameda' else g['away']
         res  = 'W' if g['winner']=='Alameda' else 'L'
         rnd  = g.get('round',''); field = g.get('field','')
-        html += f"""<div class="game-row">
+        gid  = game_id_by_game.get(id(g))
+        tag  = 'a' if gid else 'div'
+        href = f' href="games/{gid}.html"' if gid else ''
+        arrow = '<span class="arrow">→</span>' if gid else ''
+        html += f"""<{tag} class="game-row"{href}>
   <span class="result {res}">{res}</span>
   <span class="score">{us}–{them}</span>
   <span class="opp">vs {opp}{' · ' + field if field else ''}</span>
   <span>{g['date']}</span>
   {'<span class="round">' + rnd + '</span>' if rnd else ''}
-</div>"""
+  {arrow}
+</{tag}>"""
 
 html += f"""
 </div>

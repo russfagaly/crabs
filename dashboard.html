@@ -36,6 +36,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Ari
 /* ── Header ── */
 .header{position:relative;background:linear-gradient(135deg,var(--header-grad-1),var(--header-grad-2));padding:20px 16px;text-align:center;border-bottom:2px solid var(--border)}
 .header h1{font-size:clamp(17px,4vw,24px);font-weight:800;color:var(--text-strong);letter-spacing:1px}
+.header h1 a{color:inherit;text-decoration:none}
 .header .sub{font-size:clamp(11px,2.5vw,13px);color:var(--text-muted);margin-top:4px}
 .record{display:flex;flex-wrap:wrap;gap:16px 24px;justify-content:center;margin-top:14px}
 .record .stat{text-align:center;min-width:60px}
@@ -49,6 +50,10 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Ari
 #theme-toggle .sun{display:none}
 [data-theme="light"] #theme-toggle .sun{display:inline}
 [data-theme="light"] #theme-toggle .moon{display:none}
+
+/* ── Back link ── */
+.back-link{position:absolute;top:12px;left:12px;background:var(--surface);border:1px solid var(--border);
+  border-radius:20px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--text);text-decoration:none}
 
 /* ── Layout ── */
 .section{padding:12px 12px 0;max-width:1200px;margin:0 auto}
@@ -90,16 +95,33 @@ tr:hover td.name{background:var(--row-hover-name)}
 
 /* ── Game log ── */
 .game-row{display:flex;align-items:center;gap:8px;padding:8px 10px;
-  background:var(--surface);border-radius:8px;margin-bottom:6px;font-size:13px;flex-wrap:wrap}
+  background:var(--surface);border-radius:8px;margin-bottom:6px;font-size:13px;flex-wrap:wrap;
+  text-decoration:none;color:inherit}
+.game-row:hover{background:var(--row-hover-name)}
 .game-row .result{font-weight:800;font-size:14px;min-width:24px}
 .game-row .result.W{color:var(--green)}.game-row .result.L{color:var(--red)}
 .game-row .score{color:var(--accent);font-weight:700}
 .game-row .opp{color:var(--text-muted);flex:1;min-width:120px}
 .game-row .round{font-size:10px;color:var(--text-dim);background:var(--surface-deep);padding:2px 6px;border-radius:4px}
+.game-row .arrow{color:var(--text-faint);font-size:12px}
 
 .footer{text-align:center;padding:20px;font-size:11px;color:var(--text-faintest)}
 .no-games{text-align:center;padding:40px;color:var(--text-faint);font-size:14px}
 .dnp{color:var(--text-faintest);font-style:italic;font-size:10px}
+
+/* ── Play-by-play log ── */
+.inning{background:var(--surface);border:1px solid var(--border-soft);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.inning summary{padding:10px 14px;font-weight:700;font-size:12px;letter-spacing:0.5px;cursor:pointer;
+  color:var(--text-strong);text-transform:uppercase;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.inning summary::-webkit-details-marker{display:none}
+.inning summary::after{content:"+";font-size:16px;color:var(--text-dim);font-weight:400}
+.inning[open] summary::after{content:"–"}
+.inning summary:hover{background:var(--row-hover)}
+.play{padding:8px 14px;border-top:1px solid var(--border-soft)}
+.play-header{font-weight:700;color:var(--text-strong);font-size:12px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.play-header .tag{font-weight:600;color:var(--text-dim);font-size:10px;text-transform:uppercase}
+.play-pitches{font-size:11px;color:var(--text-dim);margin-top:3px}
+.play-desc{font-size:12px;color:var(--text-muted);margin-top:3px;line-height:1.5}
 
 /* ── Responsive breakpoints ── */
 @media(max-width:768px){
@@ -140,7 +162,7 @@ function toggleTheme(){
     <span class="moon">🌙</span><span class="sun">☀️</span>
   </button>
   <h1>2026 Alameda 12u All-Stars</h1>
-  <div class="sub">Updated June 10, 2026, 10:27 PM PT</div>
+  <div class="sub">Updated June 10, 2026, 10:44 PM PT</div>
   <div class="record">
     <div class="stat"><div class="val">2-3</div><div class="lbl">Scrimmage Record</div></div>
     <div class="stat"><div class="val">5</div><div class="lbl">Games</div></div>
@@ -1064,37 +1086,42 @@ function toggleTheme(){
 
 <!-- GAME LOG -->
 <div class="section-title">📋 Game Log</div>
-<div class="game-row">
+<a class="game-row" href="games/2026_06_09_Crabs.html">
   <span class="result W">W</span>
   <span class="score">10–3</span>
   <span class="opp">vs Castro Valley LL 12U · TBD</span>
   <span>2026-06-09</span>
   <span class="round">Scrimmage</span>
-</div><div class="game-row">
+  <span class="arrow">→</span>
+</a><a class="game-row" href="games/2026_06_06_SanRamon_G2.html">
   <span class="result L">L</span>
   <span class="score">6–16</span>
   <span class="opp">vs San Ramon Valley LL 12U · TBD</span>
   <span>2026-06-06</span>
   <span class="round">Scrimmage</span>
-</div><div class="game-row">
+  <span class="arrow">→</span>
+</a><a class="game-row" href="games/2026_06_06_SanRamon_G1.html">
   <span class="result L">L</span>
   <span class="score">3–8</span>
   <span class="opp">vs San Ramon Valley LL 12U · TBD</span>
   <span>2026-06-06</span>
   <span class="round">Scrimmage</span>
-</div><div class="game-row">
+  <span class="arrow">→</span>
+</a><a class="game-row" href="games/2026_06_04_Crabs.html">
   <span class="result L">L</span>
   <span class="score">3–4</span>
   <span class="opp">vs Danville LL 12U · Danville</span>
   <span>2026-06-04</span>
   <span class="round">Scrimmage</span>
-</div><div class="game-row">
+  <span class="arrow">→</span>
+</a><a class="game-row" href="games/2026_06_02_Crabs.html">
   <span class="result W">W</span>
   <span class="score">20–8</span>
   <span class="opp">vs Palo Alto LL 12U · TBD</span>
   <span>2026-06-02</span>
   <span class="round">Scrimmage</span>
+  <span class="arrow">→</span>
+</a>
 </div>
-</div>
-<div class="footer">2026 Alameda 12u All-Stars · Generated June 10, 2026, 10:27 PM PT · 5 games</div>
+<div class="footer">2026 Alameda 12u All-Stars · Generated June 10, 2026, 10:44 PM PT · 5 games</div>
 </body></html>
