@@ -215,12 +215,13 @@ def pitching_line(t):
                 pitches=t['pitches'],last_pc=t['last_pitches'],last_date=t['last_date'],
                 outings=t['outings'])
 
-def trend(season_ops, l3_ops):
-    if l3_ops is None: return '—', 'var(--text-dim)'
-    diff = l3_ops - season_ops
-    if diff >  .100: return '▲', 'var(--green)'
-    if diff < -.100: return '▼', 'var(--red)'
-    return '●', 'var(--yellow)'
+def heat_status(l3_ops):
+    """Classify a player's last-3-games OPS as hot/steady/cold on its own
+    merits (not relative to season average)."""
+    if l3_ops is None: return '—', 'var(--text-dim)', 'NO DATA'
+    if l3_ops >= 1.000: return '🔥', 'var(--green)', 'HOT'
+    if l3_ops >= 0.600: return '●', 'var(--yellow)', 'STEADY'
+    return '❄️', 'var(--red)', 'COLD'
 
 # ── W/L record ────────────────────────────────────────────────────────────────
 wins   = sum(1 for g in GAMES if g.get('winner')=='Alameda')
@@ -268,7 +269,7 @@ for p in ROSTER:
         l3_slg=l3['h']/l3['ab']
         l3_ops=l3_obp+l3_slg; l3_avg=l3['h']/l3['ab']
 
-    tarrow,tcolor = trend(bl['ops'], l3_ops)
+    hicon,hcolor,hlabel = heat_status(l3_ops)
 
     # Per-game log for this player
     pg = []
@@ -292,7 +293,7 @@ for p in ROSTER:
         'elig':elig.strftime('%b %d') if elig and avail!='available' else '',
         'l3_ops':l3_ops,'l3_avg':l3_avg,
         'l3_h':l3.get('h',0),'l3_r':l3.get('r',0),'l3_rbi':l3.get('rbi',0),'l3_sb':l3.get('sb',0),
-        'trend_arrow':tarrow,'trend_color':tcolor,'per_game':pg,
+        'heat_icon':hicon,'heat_color':hcolor,'heat_label':hlabel,'per_game':pg,
     })
 
 # ── HTML helpers ──────────────────────────────────────────────────────────────
@@ -642,12 +643,12 @@ for p in sorted(players, key=lambda x: -(x['l3_ops'] or 0)):
   <div class="card">
     <div class="player-name">{p['full']}</div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-      <span class="trend" style="color:{p['trend_color']};font-size:22px;font-weight:800">{p['trend_arrow']}</span>
+      <span class="heat" style="font-size:22px">{p['heat_icon']}</span>
       <div><div style="font-size:11px;color:var(--text-dim)">L3 OPS</div>
         <div style="font-size:18px;font-weight:800;color:var(--accent)">{l3_ops_s}</div></div>
       <div style="margin-left:auto;text-align:right">
-        <div style="font-size:11px;color:var(--text-dim)">Season</div>
-        <div style="font-size:13px;color:var(--text-muted)">{fmt(p['batting']['ops'])}</div></div>
+        <div style="font-size:11px;color:{p['heat_color']};font-weight:700;letter-spacing:1px">{p['heat_label']}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:2px">Season {fmt(p['batting']['ops'])}</div></div>
     </div>
     <div class="l3-stats">
       <div class="l3-stat"><div class="l3-val">{l3_avg_s}</div><div class="l3-lbl">AVG</div></div>
