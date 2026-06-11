@@ -66,6 +66,14 @@ for path in sorted(glob.glob(os.path.join(game_dir, '*.py'))):
 
 game_ids = sorted(game_ids, key=lambda x: x[0])
 
+# Per-game-id label suffix, e.g. " (G2)" for doubleheaders on the same date
+game_label_suffix = {}
+_date_game_count = defaultdict(int)
+for game_id, date_str in game_ids:
+    _date_game_count[date_str] += 1
+    n = sum(1 for _, d in game_ids if d == date_str)
+    game_label_suffix[game_id] = f' (G{_date_game_count[date_str]})' if n > 1 else ''
+
 # Build game info lookup — match sorted game files to GAMES entries by date order
 _games_by_date = defaultdict(list)
 for g in GAMES:
@@ -120,6 +128,18 @@ for row in all_hitting:
         player_game_log[key][gid] = defaultdict(int)
     for f in ['ab','h','bb','hbp','r','rbi','sb','cs','so','doubles','triples','hr','e']:
         player_game_log[key][gid][f] += row.get(f, 0)
+
+player_pitch_log = defaultdict(dict)  # short -> {game_id -> stats}
+for row in all_pitching:
+    key = display_name(row['name'])
+    gid = row['game_id']
+    ip  = ip_to_dec(row.get('ip', '0'))
+    if gid not in player_pitch_log[key]:
+        player_pitch_log[key][gid] = defaultdict(int)
+        player_pitch_log[key][gid]['ip'] = 0.
+    player_pitch_log[key][gid]['ip'] += ip
+    for f in ['h','r','er','bb','so','hr','hbp','pitches','strikes','bf']:
+        player_pitch_log[key][gid][f] += row.get(f, 0)
 
 p_totals = defaultdict(lambda: {
     'ip':0.,'so':0,'bb':0,'h':0,'er':0,'r':0,'hr':0,
@@ -287,13 +307,26 @@ for p in ROSTER:
                    'bb':bb,'hbp':hbp,'sb':gs.get('sb',0),'so':gs.get('so',0),
                    'avg':avg,'ops':ops,'opp':gi.get('opp',''),'result':gi.get('result',''),
                    'score':gi.get('score',''),'dnp':ab==0 and bb==0 and hbp==0})
+
+    # Per-game pitching log for this player
+    pgp = []
+    for game_id, date_str in game_ids:
+        ps = player_pitch_log.get(short, {}).get(game_id)
+        if ps:
+            pgp.append({'date':date_str,'game_id':game_id,'pitched':True,
+                        'ip':ip_disp(ps['ip']),'h':ps['h'],'r':ps['r'],'er':ps['er'],
+                        'bb':ps['bb'],'so':ps['so'],'hr':ps['hr'],'hbp':ps['hbp'],
+                        'pitches':ps['pitches'],'strikes':ps['strikes'],'bf':ps['bf']})
+        else:
+            pgp.append({'date':date_str,'game_id':game_id,'pitched':False})
+
     players.append({
         'full':p['full'],'short':short,'batting':bl,'pitching':pl,
         'avail':avail,'avail_msg':avail_msg,'last_pc':last_pc,
         'elig':elig.strftime('%b %d') if elig and avail!='available' else '',
         'l3_ops':l3_ops,'l3_avg':l3_avg,
         'l3_h':l3.get('h',0),'l3_r':l3.get('r',0),'l3_rbi':l3.get('rbi',0),'l3_sb':l3.get('sb',0),
-        'heat_icon':hicon,'heat_color':hcolor,'heat_label':hlabel,'per_game':pg,
+        'heat_icon':hicon,'heat_color':hcolor,'heat_label':hlabel,'per_game':pg,'per_game_pitch':pgp,
     })
 
 # ── HTML helpers ──────────────────────────────────────────────────────────────
@@ -574,6 +607,39 @@ for p, pl in pit_players:
 
 html += """</tbody></table></div>
 
+<!-- PITCHING PER-GAME SPLITS -->
+<div class="section-title">📅 Pitching — Per-Game Splits</div>
+<div class="tbl-wrap"><table>
+<thead><tr>
+  <th class="left">Player</th>
+"""
+
+for game_id, date_str in game_ids:
+    gi = game_log_by_id.get(game_id, {})
+    opp = gi.get('opp', 'Game')
+    res = gi.get('result', '')
+    score = gi.get('score', '')
+    res_color = 'var(--green)' if res=='W' else 'var(--red)' if res=='L' else 'var(--text-muted)'
+    g_label = game_label_suffix[game_id]
+    html += f'<th style="min-width:90px"><div style="color:{res_color};font-weight:700">{res} {score}</div><div style="font-size:10px;color:var(--text-dim)">{opp}</div><div style="font-size:10px;color:var(--text-faint)">{date_str}{g_label}</div></th>'
+
+html += """</tr></thead><tbody>
+"""
+
+for p, _ in pit_players:
+    html += f'<tr><td class="name">{p["full"]}</td>'
+    for g in p['per_game_pitch']:
+        if not g['pitched']:
+            html += '<td class="dnp">—</td>'
+        else:
+            er_cls = 'hi' if g['er']==0 else 'med' if g['er']<=1 else 'bad'
+            line2 = ' '.join(filter(None, [f'{g["h"]}H' if g["h"] else '', f'{g["r"]}R' if g["r"] else '', f'{g["er"]}ER' if g["er"] else '']))
+            line3 = ' '.join(filter(None, [f'{g["bb"]}BB' if g["bb"] else '', f'{g["so"]}K' if g["so"] else '', f'{g["pitches"]}P' if g["pitches"] else '']))
+            html += f'<td><div class="{er_cls}" style="font-weight:700;font-size:13px">{g["ip"]} IP</div><div style="font-size:10px;color:var(--text-dim)">{line2 or "—"}</div><div style="font-size:10px;color:var(--text-faint)">{line3}</div></td>'
+    html += '</tr>'
+
+html += """</tbody></table></div>
+
 <!-- PITCH COUNT LOG -->
 <div class="section-title">📋 Pitch Count & Availability</div>
 <div class="tbl-wrap"><table>
@@ -667,15 +733,13 @@ html += """
   <th class="left">Player</th>
 """
 
-_date_game_count = defaultdict(int)
 for game_id, date_str in game_ids:
     gi = game_log_by_id.get(game_id, {})
     opp = gi.get('opp', 'Game')
     res = gi.get('result', '')
     score = gi.get('score', '')
     res_color = 'var(--green)' if res=='W' else 'var(--red)' if res=='L' else 'var(--text-muted)'
-    _date_game_count[date_str] += 1
-    g_label = f' (G{_date_game_count[date_str]})' if sum(1 for _, d in game_ids if d == date_str) > 1 else ''
+    g_label = game_label_suffix[game_id]
     html += f'<th style="min-width:90px"><div style="color:{res_color};font-weight:700">{res} {score}</div><div style="font-size:10px;color:var(--text-dim)">{opp}</div><div style="font-size:10px;color:var(--text-faint)">{date_str}{g_label}</div></th>'
 
 html += """</tr></thead><tbody>
