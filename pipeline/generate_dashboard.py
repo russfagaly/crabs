@@ -213,11 +213,11 @@ def pitching_line(t):
                 outings=t['outings'])
 
 def trend(season_ops, l3_ops):
-    if l3_ops is None: return '—', '#888'
+    if l3_ops is None: return '—', 'var(--text-dim)'
     diff = l3_ops - season_ops
-    if diff >  .100: return '▲', '#22c55e'
-    if diff < -.100: return '▼', '#ef4444'
-    return '●', '#facc15'
+    if diff >  .100: return '▲', 'var(--green)'
+    if diff < -.100: return '▼', 'var(--red)'
+    return '●', 'var(--yellow)'
 
 # ── W/L record ────────────────────────────────────────────────────────────────
 wins   = sum(1 for g in GAMES if g.get('winner')=='Alameda')
@@ -310,7 +310,7 @@ def pct(val, dec=1):
     return f"{val:.{dec}f}%"
 
 def avail_badge(status, elig_date=''):
-    colors={'available':'#22c55e','soon':'#facc15','unavailable':'#ef4444'}
+    colors={'available':'var(--green)','soon':'var(--yellow)','unavailable':'var(--red)'}
     if status == 'available':
         label = 'AVAILABLE'
     else:
@@ -339,7 +339,7 @@ for p in sorted(players, key=lambda x: -x['batting']['qab_pct']):
     )
 team_qab_pct = team_qab_total / team_pa_total if team_pa_total > 0 else 0
 pqab_rows_html += (
-    f'<tr style="font-weight:700;border-top:2px solid #334155">'
+    f'<tr style="font-weight:700;border-top:2px solid var(--border)">'
     f'<td class="name">TEAM</td>'
     f'<td>{team_pa_total}</td><td></td><td></td><td></td><td></td>'
     f'<td class="{_pqab_cls(team_qab_pct)}">{team_qab_total}</td>'
@@ -386,69 +386,101 @@ html = f"""<!DOCTYPE html>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>2026 Alameda 12u All-Stars</title>
 <style>
+:root{{
+  --bg:#0f172a; --text:#e2e8f0; --text-strong:#f8fafc;
+  --text-muted:#94a3b8; --text-dim:#64748b; --text-faint:#475569; --text-faintest:#334155;
+  --border:#334155; --border-soft:#1e293b;
+  --surface:#1e293b; --surface-2:#131e30; --surface-3:#111a28; --surface-deep:#0f172a;
+  --th-group-bg:#0d1829;
+  --row-hover:#1e293b88; --row-hover-name:#1e3a5f;
+  --accent:#38bdf8; --green:#22c55e; --yellow:#facc15; --red:#ef4444;
+  --header-grad-1:#1e3a5f; --header-grad-2:#0f172a;
+  --info-bg:#172554; --info-border:#1e40af; --info-heading:#93c5fd;
+  --warn-bg:#422006; --warn-border:#92400e; --warn-heading:#fbbf24; --warn-text:#d97706;
+}}
+[data-theme="light"]{{
+  --bg:#f1f5f9; --text:#1e293b; --text-strong:#0f172a;
+  --text-muted:#64748b; --text-dim:#94a3b8; --text-faint:#94a3b8; --text-faintest:#cbd5e1;
+  --border:#cbd5e1; --border-soft:#e2e8f0;
+  --surface:#ffffff; --surface-2:#f8fafc; --surface-3:#f1f5f9; --surface-deep:#e2e8f0;
+  --th-group-bg:#e2e8f0;
+  --row-hover:#cbd5e166; --row-hover-name:#dbeafe;
+  --accent:#0284c7; --green:#16a34a; --yellow:#ca8a04; --red:#dc2626;
+  --header-grad-1:#cbd5e1; --header-grad-2:#f1f5f9;
+  --info-bg:#eff6ff; --info-border:#bfdbfe; --info-heading:#1d4ed8;
+  --warn-bg:#fffbeb; --warn-border:#fde68a; --warn-heading:#b45309; --warn-text:#92400e;
+}}
 *{{box-sizing:border-box;margin:0;padding:0}}
 html{{-webkit-text-size-adjust:100%}}
-body{{background:#0f172a;color:#e2e8f0;font-family:'Segoe UI',system-ui,Arial,sans-serif;font-size:14px;line-height:1.4}}
+body{{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Arial,sans-serif;font-size:14px;line-height:1.4;transition:background .15s,color .15s}}
 
 /* ── Header ── */
-.header{{background:linear-gradient(135deg,#1e3a5f,#0f172a);padding:20px 16px;text-align:center;border-bottom:2px solid #334155}}
-.header h1{{font-size:clamp(17px,4vw,24px);font-weight:800;color:#f8fafc;letter-spacing:1px}}
-.header .sub{{font-size:clamp(11px,2.5vw,13px);color:#94a3b8;margin-top:4px}}
+.header{{position:relative;background:linear-gradient(135deg,var(--header-grad-1),var(--header-grad-2));padding:20px 16px;text-align:center;border-bottom:2px solid var(--border)}}
+.header h1{{font-size:clamp(17px,4vw,24px);font-weight:800;color:var(--text-strong);letter-spacing:1px}}
+.header .sub{{font-size:clamp(11px,2.5vw,13px);color:var(--text-muted);margin-top:4px}}
 .record{{display:flex;flex-wrap:wrap;gap:16px 24px;justify-content:center;margin-top:14px}}
 .record .stat{{text-align:center;min-width:60px}}
-.record .val{{font-size:clamp(20px,5vw,28px);font-weight:800;color:#38bdf8}}
-.record .lbl{{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:1px}}
+.record .val{{font-size:clamp(20px,5vw,28px);font-weight:800;color:var(--accent)}}
+.record .lbl{{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px}}
+
+/* ── Theme toggle ── */
+#theme-toggle{{position:absolute;top:12px;right:12px;background:var(--surface);border:1px solid var(--border);
+  border-radius:20px;width:36px;height:36px;font-size:16px;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;color:var(--text)}}
+#theme-toggle .sun{{display:none}}
+[data-theme="light"] #theme-toggle .sun{{display:inline}}
+[data-theme="light"] #theme-toggle .moon{{display:none}}
 
 /* ── Layout ── */
 .section{{padding:12px 12px 0;max-width:1200px;margin:0 auto}}
 .section-title{{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;
-  color:#94a3b8;margin-bottom:10px;margin-top:20px;padding-bottom:6px;border-bottom:1px solid #1e293b}}
+  color:var(--text-muted);margin-bottom:10px;margin-top:20px;padding-bottom:6px;border-bottom:1px solid var(--border-soft)}}
 
 /* ── Tables ── */
 .tbl-wrap{{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:20px;
-  border-radius:8px;border:1px solid #1e293b}}
+  border-radius:8px;border:1px solid var(--border-soft)}}
 table{{width:100%;border-collapse:collapse;font-size:11px;white-space:nowrap}}
-th{{background:#1e293b;color:#94a3b8;padding:7px 5px;text-align:center;
-   font-weight:600;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid #334155}}
+th{{background:var(--surface);color:var(--text-muted);padding:7px 5px;text-align:center;
+   font-weight:600;text-transform:uppercase;letter-spacing:0.4px;border-bottom:1px solid var(--border)}}
 th.left{{text-align:left;padding-left:8px}}
-td{{padding:6px 5px;text-align:center;border-bottom:1px solid #0f172a;color:#e2e8f0}}
-td.name{{text-align:left;padding-left:8px;font-weight:600;color:#f1f5f9;white-space:nowrap;
-  position:sticky;left:0;background:#131e30;z-index:1}}
-tr:nth-child(even) td.name{{background:#111a28}}
-tr:hover td{{background:#1e293b44}}
-tr:hover td.name{{background:#1e3a5f}}
-.hi{{color:#22c55e;font-weight:700}}
-.med{{color:#facc15}}
-.lo{{color:#94a3b8}}
-.bad{{color:#ef4444;font-weight:700}}
-.dim{{color:#334155}}
-.th-group{{background:#0d1829;color:#475569;font-size:9px;letter-spacing:1px}}
+td{{padding:6px 5px;text-align:center;border-bottom:1px solid var(--surface-deep);color:var(--text)}}
+td.name{{text-align:left;padding-left:8px;font-weight:600;color:var(--text-strong);white-space:nowrap;
+  position:sticky;left:0;background:var(--surface-2);z-index:1}}
+tr:nth-child(even) td.name{{background:var(--surface-3)}}
+tr:hover td{{background:var(--row-hover)}}
+tr:hover td.name{{background:var(--row-hover-name)}}
+.hi{{color:var(--green);font-weight:700}}
+.med{{color:var(--yellow)}}
+.lo{{color:var(--text-muted)}}
+.bad{{color:var(--red);font-weight:700}}
+.dim{{color:var(--text-faintest)}}
+.th-group{{background:var(--th-group-bg);color:var(--text-faint);font-size:9px;letter-spacing:1px}}
 
 /* ── Cards ── */
 .cards{{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:20px}}
-.card{{background:#1e293b;border-radius:10px;padding:12px;border:1px solid #334155}}
+.card{{background:var(--surface);border-radius:10px;padding:12px;border:1px solid var(--border)}}
 .card.available{{border-color:#22c55e44}}.card.soon{{border-color:#facc1544}}.card.unavailable{{border-color:#ef444444}}
-.card .player-name{{font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:6px}}
+.card .player-name{{font-size:14px;font-weight:700;color:var(--text-strong);margin-bottom:6px}}
 .card .badge-row{{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}}
-.card .pc{{font-size:11px;color:#94a3b8}}
-.card .avail-msg{{font-size:10px;color:#64748b;margin-top:3px}}
+.card .pc{{font-size:11px;color:var(--text-muted)}}
+.card .avail-msg{{font-size:10px;color:var(--text-dim);margin-top:3px}}
 .card .l3-stats{{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:8px}}
-.card .l3-stat{{text-align:center;background:#0f172a;border-radius:6px;padding:5px 2px}}
-.card .l3-val{{font-size:15px;font-weight:700;color:#38bdf8}}
-.card .l3-lbl{{font-size:9px;color:#64748b;text-transform:uppercase}}
+.card .l3-stat{{text-align:center;background:var(--surface-deep);border-radius:6px;padding:5px 2px}}
+.card .l3-val{{font-size:15px;font-weight:700;color:var(--accent)}}
+.card .l3-lbl{{font-size:9px;color:var(--text-dim);text-transform:uppercase}}
 
 /* ── Game log ── */
 .game-row{{display:flex;align-items:center;gap:8px;padding:8px 10px;
-  background:#1e293b;border-radius:8px;margin-bottom:6px;font-size:13px;flex-wrap:wrap}}
+  background:var(--surface);border-radius:8px;margin-bottom:6px;font-size:13px;flex-wrap:wrap}}
 .game-row .result{{font-weight:800;font-size:14px;min-width:24px}}
-.game-row .result.W{{color:#22c55e}}.game-row .result.L{{color:#ef4444}}
-.game-row .score{{color:#38bdf8;font-weight:700}}
-.game-row .opp{{color:#94a3b8;flex:1;min-width:120px}}
-.game-row .round{{font-size:10px;color:#64748b;background:#0f172a;padding:2px 6px;border-radius:4px}}
+.game-row .result.W{{color:var(--green)}}.game-row .result.L{{color:var(--red)}}
+.game-row .score{{color:var(--accent);font-weight:700}}
+.game-row .opp{{color:var(--text-muted);flex:1;min-width:120px}}
+.game-row .round{{font-size:10px;color:var(--text-dim);background:var(--surface-deep);padding:2px 6px;border-radius:4px}}
 
-.footer{{text-align:center;padding:20px;font-size:11px;color:#334155}}
-.no-games{{text-align:center;padding:40px;color:#475569;font-size:14px}}
-.dnp{{color:#334155;font-style:italic;font-size:10px}}
+.footer{{text-align:center;padding:20px;font-size:11px;color:var(--text-faintest)}}
+.no-games{{text-align:center;padding:40px;color:var(--text-faint);font-size:14px}}
+.dnp{{color:var(--text-faintest);font-style:italic;font-size:10px}}
 
 /* ── Responsive breakpoints ── */
 @media(max-width:768px){{
@@ -468,10 +500,26 @@ tr:hover td.name{{background:#1e3a5f}}
   .game-row .opp{{min-width:80px;font-size:11px}}
 }}
 </style>
+<script>
+(function(){{
+  var t = localStorage.getItem('crabs-theme');
+  if(!t){{ t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark'; }}
+  document.documentElement.setAttribute('data-theme', t);
+}})();
+function toggleTheme(){{
+  var html = document.documentElement;
+  var next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('crabs-theme', next);
+}}
+</script>
 </head>
 <body>
 
 <div class="header">
+  <button id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">
+    <span class="moon">🌙</span><span class="sun">☀️</span>
+  </button>
   <h1>2026 Alameda 12u All-Stars</h1>
   <div class="sub">Updated {GENERATED}</div>
   <div class="record">
@@ -563,10 +611,10 @@ html += f"""</tbody></table></div>
 
 <!-- pQAB -->
 <div class="section-title">✅ Quality At Bats (pQAB)</div>
-<div style="background:#172554;border:1px solid #1e40af;border-radius:8px;padding:12px 16px;margin-bottom:14px">
-  <div style="font-weight:700;color:#93c5fd;font-size:12px;margin-bottom:4px">ℹ️ Partial QAB Count — Data Limitations Apply</div>
-  <div style="color:#94a3b8;font-size:11px;line-height:1.6">
-    <b style="color:#e2e8f0">pQAB</b> counts plate appearances where the batter recorded a <b style="color:#e2e8f0">Hit, Walk, HBP, RBI on an out, or a Hard-Hit Out</b>
+<div style="background:var(--info-bg);border:1px solid var(--info-border);border-radius:8px;padding:12px 16px;margin-bottom:14px">
+  <div style="font-weight:700;color:var(--info-heading);font-size:12px;margin-bottom:4px">ℹ️ Partial QAB Count — Data Limitations Apply</div>
+  <div style="color:var(--text-muted);font-size:11px;line-height:1.6">
+    <b style="color:var(--text-strong)">pQAB</b> counts plate appearances where the batter recorded a <b style="color:var(--text-strong)">Hit, Walk, HBP, RBI on an out, or a Hard-Hit Out</b>
     (line drive or hard-hit ground/fly ball, even when caught — from play-by-play logs where available).
     Criteria still <em>not</em> tracked: sac bunts, runner advancement to scoring position with &lt;2 outs, 8+ pitch ABs, 4+ pitches after an 0-2 count
     (none have occurred yet this season). True QAB% may still run slightly higher than shown.
@@ -592,7 +640,7 @@ html += f"""</tbody></table></div>
 
 <!-- LINEUP POSITION HEATMAP -->
 <div class="section-title">🔢 Performance by Batting Order Position</div>
-<div style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:10px 16px;margin-bottom:14px;color:#94a3b8;font-size:11px;line-height:1.6">
+<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;margin-bottom:14px;color:var(--text-muted);font-size:11px;line-height:1.6">
   H-AB totals across all games when a player batted in that lineup spot. Dashes mean the player never batted there.
 </div>
 <div class="tbl-wrap"><table>
@@ -687,11 +735,11 @@ html += """</tbody></table></div>
 
 <!-- FIELDING -->
 <div class="section-title">🧤 Fielding</div>
-<div style="background:#422006;border:1px solid #92400e;border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
+<div style="background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
   <span style="font-size:22px">🚧</span>
   <div>
-    <div style="font-weight:700;color:#fbbf24;font-size:13px">Under Construction</div>
-    <div style="color:#d97706;font-size:12px;margin-top:2px">Full fielding stats (PO, A, DP, FLD%) coming soon. Errors shown below are pulled from game files.</div>
+    <div style="font-weight:700;color:var(--warn-heading);font-size:13px">Under Construction</div>
+    <div style="color:var(--warn-text);font-size:12px;margin-top:2px">Full fielding stats (PO, A, DP, FLD%) coming soon. Errors shown below are pulled from game files.</div>
   </div>
 </div>
 <div class="tbl-wrap"><table>
@@ -724,11 +772,11 @@ for p in sorted(players, key=lambda x: -(x['l3_ops'] or 0)):
     <div class="player-name">{p['full']}</div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
       <span class="trend" style="color:{p['trend_color']};font-size:22px;font-weight:800">{p['trend_arrow']}</span>
-      <div><div style="font-size:11px;color:#64748b">L3 OPS</div>
-        <div style="font-size:18px;font-weight:800;color:#38bdf8">{l3_ops_s}</div></div>
+      <div><div style="font-size:11px;color:var(--text-dim)">L3 OPS</div>
+        <div style="font-size:18px;font-weight:800;color:var(--accent)">{l3_ops_s}</div></div>
       <div style="margin-left:auto;text-align:right">
-        <div style="font-size:11px;color:#64748b">Season</div>
-        <div style="font-size:13px;color:#94a3b8">{fmt(p['batting']['ops'])}</div></div>
+        <div style="font-size:11px;color:var(--text-dim)">Season</div>
+        <div style="font-size:13px;color:var(--text-muted)">{fmt(p['batting']['ops'])}</div></div>
     </div>
     <div class="l3-stats">
       <div class="l3-stat"><div class="l3-val">{l3_avg_s}</div><div class="l3-lbl">AVG</div></div>
@@ -753,10 +801,10 @@ for game_id, date_str in game_ids:
     opp = gi.get('opp', 'Game')
     res = gi.get('result', '')
     score = gi.get('score', '')
-    res_color = '#22c55e' if res=='W' else '#ef4444' if res=='L' else '#94a3b8'
+    res_color = 'var(--green)' if res=='W' else 'var(--red)' if res=='L' else 'var(--text-muted)'
     _date_game_count[date_str] += 1
     g_label = f' (G{_date_game_count[date_str]})' if sum(1 for _, d in game_ids if d == date_str) > 1 else ''
-    html += f'<th style="min-width:90px"><div style="color:{res_color};font-weight:700">{res} {score}</div><div style="font-size:10px;color:#64748b">{opp}</div><div style="font-size:10px;color:#475569">{date_str}{g_label}</div></th>'
+    html += f'<th style="min-width:90px"><div style="color:{res_color};font-weight:700">{res} {score}</div><div style="font-size:10px;color:var(--text-dim)">{opp}</div><div style="font-size:10px;color:var(--text-faint)">{date_str}{g_label}</div></th>'
 
 html += """</tr></thead><tbody>
 """
@@ -771,7 +819,7 @@ for p in sorted(players, key=lambda x: x['full']):
             hab_s = f'{g["h"]}-{g["ab"]}' if g['ab'] > 0 else f'BB×{g["bb"]}' if g['bb'] > 0 else '—'
             line2 = ' '.join(filter(None, [f'{g["r"]}R' if g["r"] else '', f'{g["rbi"]}RBI' if g["rbi"] else '', f'{g["bb"]}BB' if g["bb"] else '', f'{g["hbp"]}HBP' if g["hbp"] else '']))
             extras = ' '.join(filter(None, [f'{g["sb"]}SB' if g["sb"] else '', f'{g["so"]}K' if g["so"] else '']))
-            html += f'<td><div class="{avg_cls}" style="font-weight:700;font-size:13px">{hab_s}</div><div style="font-size:10px;color:#64748b">{line2}</div><div style="font-size:10px;color:#475569">{extras}</div></td>'
+            html += f'<td><div class="{avg_cls}" style="font-weight:700;font-size:13px">{hab_s}</div><div style="font-size:10px;color:var(--text-dim)">{line2}</div><div style="font-size:10px;color:var(--text-faint)">{extras}</div></td>'
     html += '</tr>'
 
 html += """</tbody></table></div>
