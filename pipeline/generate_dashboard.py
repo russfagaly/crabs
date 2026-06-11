@@ -18,6 +18,7 @@ from zoneinfo import ZoneInfo
 sys.path.insert(0, os.path.dirname(__file__))
 from roster import ROSTER
 from results import GAMES
+from fielding_parser import parse_game_fielding
 import theme
 
 # ── Little League pitch count rest rules ─────────────────────────────────────
@@ -65,6 +66,14 @@ for path in sorted(glob.glob(os.path.join(game_dir, '*.py'))):
         all_pitching.append({**row, 'game_id': game_id, 'date': date_str})
 
 game_ids = sorted(game_ids, key=lambda x: x[0])
+
+# ── Fielding stats (best-effort, from play-by-play; PO/A/DP are minimums —
+# many unnamed routine plays can't be attributed) ─────────────────────────────
+field_totals = defaultdict(lambda: {'po': 0, 'a': 0, 'dp': 0})
+for game_id, _ in game_ids:
+    for full_name, d in parse_game_fielding(game_id).items():
+        for k in d:
+            field_totals[full_name][k] += d[k]
 
 # Per-game-id label suffix, e.g. " (G2)" for doubleheaders on the same date
 game_label_suffix = {}
@@ -320,8 +329,16 @@ for p in ROSTER:
         else:
             pgp.append({'date':date_str,'game_id':game_id,'pitched':False})
 
+    # Fielding (best-effort from play-by-play; PO/A/DP are minimums)
+    fpo = field_totals[p['full']]['po']
+    fa  = field_totals[p['full']]['a']
+    fdp = field_totals[p['full']]['dp']
+    fchances = fpo + fa + bl['e']
+    fpct = (fpo + fa) / fchances if fchances > 0 else None
+    field = {'po':fpo,'a':fa,'dp':fdp,'pct':fpct}
+
     players.append({
-        'full':p['full'],'short':short,'batting':bl,'pitching':pl,
+        'full':p['full'],'short':short,'batting':bl,'pitching':pl,'field':field,
         'avail':avail,'avail_msg':avail_msg,'last_pc':last_pc,
         'elig':elig.strftime('%b %d') if elig and avail!='available' else '',
         'l3_ops':l3_ops,'l3_avg':l3_avg,
@@ -676,23 +693,30 @@ html += """</tbody></table></div>
 <div style="background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
   <span style="font-size:22px">🚧</span>
   <div>
-    <div style="font-weight:700;color:var(--warn-heading);font-size:13px">Under Construction</div>
-    <div style="color:var(--warn-text);font-size:12px;margin-top:2px">Full fielding stats (PO, A, DP, FLD%) coming soon. Errors shown below are pulled from game files.</div>
+    <div style="font-weight:700;color:var(--warn-heading);font-size:13px">Partial Stats — From Play-by-Play</div>
+    <div style="color:var(--warn-text);font-size:12px;margin-top:2px">PO, A, and DP are pulled from play-by-play descriptions and only counted when a Crabs fielder is named. Many routine plays (e.g. unassisted putouts at first, strikeout catcher putouts) don't name a fielder and aren't counted — so PO/A/DP are minimums, not official totals. Errors (E) are accurate, from game files.</div>
   </div>
 </div>
 <div class="tbl-wrap"><table>
 <thead><tr>
-  <th class="left">Player</th><th>GP</th><th>E</th>
+  <th class="left">Player</th><th>GP</th><th>PO</th><th>A</th><th>E</th><th>DP</th><th>FLD%</th>
 </tr></thead><tbody>
 """
 
 for p in sorted(players, key=lambda x: x['full']):
     b = p['batting']
+    f = p['field']
     e_cls = 'bad' if b['e'] > 2 else 'med' if b['e'] > 0 else 'dim'
+    pct_cls = 'dim' if f['pct'] is None else ('hi' if f['pct']>=.950 else 'med' if f['pct']>=.900 else 'bad')
+    pct_s = fmt(f['pct']) if f['pct'] is not None else '—'
     html += f"""<tr>
   <td class="name">{p['full']}</td>
   <td>{b['gp']}</td>
+  <td class="{'dim' if f['po']==0 else ''}">{f['po']}</td>
+  <td class="{'dim' if f['a']==0 else ''}">{f['a']}</td>
   <td class="{e_cls}">{b['e']}</td>
+  <td class="{'dim' if f['dp']==0 else ''}">{f['dp']}</td>
+  <td class="{pct_cls}">{pct_s}</td>
 </tr>"""
 
 html += """</tbody></table></div>
