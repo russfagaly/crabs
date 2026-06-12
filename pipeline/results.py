@@ -23,6 +23,9 @@ GAMES = [
     {"date": "2026-06-09", "away": "Alameda", "home": "Castro Valley LL 12U",
      "away_score": 10, "home_score": 3, "winner": "Alameda",
      "field": "TBD", "round": "Scrimmage"},
+    {"date": "2026-06-11", "away": "Alameda", "home": "San Mateo",
+     "away_score": 2, "home_score": 12, "winner": "San Mateo",
+     "field": "TBD", "round": "Scrimmage"},
 
     # ── Districts ──────────────────────────────────────────────────────────
     # {"date": "2026-07-XX", "away": "Alameda", "home": "Opponent",
