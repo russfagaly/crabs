@@ -29,6 +29,9 @@ GAMES = [
     {"date": "2026-06-13", "away": "Alameda", "home": "San Francisco LL 12U",
      "away_score": 24, "home_score": 1, "winner": "Alameda",
      "field": "TBD", "round": "Scrimmage"},
+    {"date": "2026-06-13", "away": "Alameda", "home": "San Francisco LL 12U",
+     "away_score": 19, "home_score": 0, "winner": "Alameda",
+     "field": "TBD", "round": "Scrimmage"},
 
     # ── Districts ──────────────────────────────────────────────────────────
     # {"date": "2026-07-XX", "away": "Alameda", "home": "Opponent",
