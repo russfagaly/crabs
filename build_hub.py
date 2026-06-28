@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-# build_hub.py — regenerate every team, inject the switcher, rebuild the hub landing.
-# Run from repo root. Then encrypt + push separately.
-import glob, os, subprocess, importlib.util, sys
+# build_hub.py — regenerate every team, inject the switcher, rebuild the hub
+# landing (team cards + Scouting Reports section). Run from repo root.
+import glob, os, subprocess, importlib.util
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 MARK = "hub-switcher-v1"
@@ -14,17 +14,20 @@ TEAMS = [
     ("lightning",         "Lightning",        "Lafayette Lightning", "12U · 9 games · scouting",             "#fbbf24", "Lightning"),
 ]
 
-def sh(cmd, cwd):
-    return subprocess.run(cmd, cwd=cwd, shell=True, capture_output=True, text=True)
+# Scouting reports (newest first). Drop the HTML in scouting/ then add a line.
+# (filename_in_scouting, title, subtitle, date_label)
+REPORTS = [
+    ("2026-06-29_crabs-vs-noll.html", "Crabs vs NOLL", "District tournament · pre-game scouting", "Jun 29, 2026"),
+]
 
-def record(slug, token):
+def sh(cmd, cwd): return subprocess.run(cmd, cwd=cwd, shell=True, capture_output=True, text=True)
+
+def record(slug):
     p = os.path.join(ROOT, slug, "pipeline", "results.py")
     spec = importlib.util.spec_from_file_location("r_"+slug, p)
     m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
-    r = m.get_record()              # authoritative; (w,l) or (w,l,t)
-    w, l = r[0], r[1]; t = r[2] if len(r) > 2 else 0
-    rec = f"{w}–{l}" + (f"–{t}" if t else "")
-    return rec, len(m.GAMES)
+    r = m.get_record(); w, l = r[0], r[1]; t = r[2] if len(r) > 2 else 0
+    return f"{w}–{l}" + (f"–{t}" if t else "")
 
 def nav(active):
     links = ['<a href="../" style="color:#8b949e;text-decoration:none;padding:6px 11px;border-radius:6px">&#127968; Home</a>']
@@ -39,7 +42,7 @@ def nav(active):
 def inject(path, active):
     html = open(path, encoding="utf-8").read()
     if MARK in html: return
-    i = html.lower().find("<body");  j = html.find(">", i)+1
+    i = html.lower().find("<body"); j = html.find(">", i)+1
     open(path,"w",encoding="utf-8").write(html[:j] + "\n" + nav(active) + html[j:])
 
 # 1. regenerate each team + inject switcher
@@ -54,19 +57,39 @@ for slug,label,title,meta,accent,token in TEAMS:
     for fn in ("index.html","dashboard.html","scouting.html"):
         fp = os.path.join(d, fn)
         if os.path.exists(fp): inject(fp, slug)
-    recs[slug] = record(slug, token)
-    print(f"  {slug}: {recs[slug][0]} ({recs[slug][1]} games)")
+    recs[slug] = record(slug)
+    print(f"  {slug}: {recs[slug]}")
 
-# 2. build hub landing
+# 2. inject switcher into scouting report pages (no active team)
+for fp in glob.glob(os.path.join(ROOT,"scouting","*.html")):
+    inject(fp, "")
+print(f"  scouting reports: {len(REPORTS)}")
+
+# 3. build hub landing
 cards = ""
 for slug,label,title,meta,accent,token in TEAMS:
-    rec,_ = recs[slug]
     cards += f'''  <a class="card" style="--accent:{accent}" href="./{slug}/">
     <div class="team"><span class="dot"></span>{title}</div>
     <div class="meta">{meta}</div>
-    <div class="rec">{rec}</div><div class="reclbl">Record</div>
+    <div class="rec">{recs[slug]}</div><div class="reclbl">Record</div>
     <div class="go">View dashboard &rarr;</div>
   </a>\n'''
+
+reports_html = ""
+if REPORTS:
+    rows = ""
+    for fn,title,sub,dt in REPORTS:
+        rows += f'''    <a class="report" href="./scouting/{fn}">
+      <div class="rdate">{dt}</div>
+      <div class="rmain"><div class="rtitle">{title}</div><div class="rsub">{sub}</div></div>
+      <div class="rarrow">&rarr;</div>
+    </a>\n'''
+    reports_html = f'''<section class="reports-wrap">
+  <h2 class="shead">&#128270; Scouting Reports</h2>
+  <div class="reports">
+{rows}  </div>
+</section>'''
+
 hub = f'''<!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>2026 All-Stars Hub</title>
@@ -81,12 +104,21 @@ hub = f'''<!DOCTYPE html><html lang="en"><head>
  .dot{{width:11px;height:11px;border-radius:50%;background:var(--accent)}}
  .meta{{color:#8b949e;font-size:14px;margin-bottom:14px}} .rec{{font-size:30px;font-weight:800;letter-spacing:-1px}}
  .reclbl{{color:#8b949e;font-size:12px;text-transform:uppercase;letter-spacing:.6px}} .go{{margin-top:14px;color:#58a6ff;font-size:14px;font-weight:600}}
+ .reports-wrap{{width:100%;max-width:920px;margin-top:40px}}
+ .shead{{font-size:18px;margin:0 0 14px;color:#e6edf3}}
+ .reports{{display:flex;flex-direction:column;gap:10px}}
+ a.report{{display:flex;align-items:center;gap:16px;text-decoration:none;color:inherit;background:#161b22;border:1px solid #30363d;border-radius:12px;padding:14px 18px;transition:border-color .15s}}
+ a.report:hover{{border-color:#f97316}}
+ .rdate{{flex:none;font-size:12px;color:#8b949e;width:92px}}
+ .rmain{{flex:1}} .rtitle{{font-weight:700;font-size:16px}} .rsub{{color:#8b949e;font-size:13px}}
+ .rarrow{{color:#58a6ff;font-weight:700;font-size:18px}}
  footer{{margin-top:48px;color:#6e7681;font-size:13px;text-align:center}}
 </style></head><body>
 <header><h1>2026 All-Stars Hub</h1><div class="sub">Hitting &amp; pitching dashboards &middot; 12U All-Star season</div></header>
 <div class="grid">
 {cards}</div>
+{reports_html}
 <footer>2026 All-Stars Hub &middot; russfagaly.github.io/crabs</footer>
 </body></html>'''
 open(os.path.join(ROOT,"index.html"),"w",encoding="utf-8").write(hub)
-print("hub landing rebuilt with", len(TEAMS), "tabs")
+print(f"hub landing rebuilt: {len(TEAMS)} tabs, {len(REPORTS)} scouting report(s)")

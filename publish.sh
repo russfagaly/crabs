@@ -45,6 +45,13 @@ for d in */ ; do
   fi
 done
 
+# scouting reports (no pipeline/, so encrypt explicitly)
+if ls scouting/*.html >/dev/null 2>&1; then
+  echo "    · scouting"
+  echo "$SALT" > scouting/.staticrypt.json
+  ENC scouting/*.html -d scouting
+fi
+
 echo "▶ 3/3  Safety check + push..."
 LEAK=$(grep -rl "<h1>2026" --include=*.html . || true)
 if [ -n "$LEAK" ]; then
