@@ -18,6 +18,7 @@ TEAMS = [
 # Scouting reports (newest first). Drop the HTML in scouting/ then add a line.
 # (filename_in_scouting, title, subtitle, date_label)
 REPORTS = [
+    ("2026-07-01_crabs-vs-soll.html", "Crabs vs SOLL", "District tournament · rematch scouting", "Jul 1, 2026"),
     ("2026-06-29_crabs-vs-noll.html", "Crabs vs NOLL", "District tournament · pre-game scouting", "Jun 29, 2026"),
 ]
 
