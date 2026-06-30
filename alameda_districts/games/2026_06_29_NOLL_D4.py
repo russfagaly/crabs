@@ -5,9 +5,6 @@ Date:     06/29
 Round:    Districts
 Result:   W  7-2
 Field:    TBD
-NOTE: Box screenshot did not include the Pitches-Strikes line, so pitch
-      counts (pitches/strikes) are unknown for this game (set to 0).
-      BF estimated from outs+hits+walks. Update when pitch counts available.
 """
 TEAM = "Alameda"
 DATE = "2026-06-29"
@@ -28,6 +25,6 @@ hitting = [
 ]
 
 pitching = [
-    {"name": "Roland Meyer #99",     "ip": "3.1", "h": 3, "r": 0, "er": 0, "bb": 3, "so": 1, "pitches": 0, "strikes": 0, "bf": 16, "hbp": 0, "hr": 0},
-    {"name": "Jordan Cerda-Zein #3", "ip": "2.2", "h": 2, "r": 2, "er": 0, "bb": 0, "so": 3, "pitches": 0, "strikes": 0, "bf": 10, "hbp": 0, "hr": 0},
+    {"name": "Roland Meyer #99",     "ip": "3.1", "h": 3, "r": 0, "er": 0, "bb": 3, "so": 1, "pitches": 70, "strikes": 43, "bf": 17, "hbp": 0, "hr": 0},
+    {"name": "Jordan Cerda-Zein #3", "ip": "2.2", "h": 2, "r": 2, "er": 0, "bb": 0, "so": 3, "pitches": 39, "strikes": 25, "bf": 10, "hbp": 0, "hr": 0},
 ]
