@@ -20,6 +20,9 @@ GAMES = [
     {"date": "2026-06-29", "away": "Alameda", "home": "NOLL 12U All-Stars",
      "away_score": 7, "home_score": 2, "winner": "Alameda",
      "field": "TBD", "round": "Districts"},
+    {"date": "2026-07-01", "away": "Alameda", "home": "SOLL 12U All-Stars",
+     "away_score": 4, "home_score": 6, "winner": "SOLL 12U All-Stars",
+     "field": "TBD", "round": "Districts"},
 ]
 
 
