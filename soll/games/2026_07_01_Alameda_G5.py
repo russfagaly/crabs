@@ -5,8 +5,6 @@ Date:     07/01
 Round:    Districts
 Result:   W  6-4
 Field:    TBD
-NOTE: SOLL pitching screenshot didn't include Pitches-Strikes, so pitch counts
-      (pitches/strikes) are unknown here (set 0); BF estimated. Update if available.
 """
 TEAM = "SOLL"
 DATE = "2026-07-01"
@@ -26,6 +24,6 @@ hitting = [
 ]
 
 pitching = [
-    {"name": "Cameron B #14", "ip": "4.1", "h": 4, "r": 4, "er": 4, "bb": 1, "so": 4, "pitches": 0, "strikes": 0, "bf": 18, "hbp": 0, "hr": 0},
-    {"name": "Caiden R #12",  "ip": "1.2", "h": 3, "r": 0, "er": 0, "bb": 1, "so": 1, "pitches": 0, "strikes": 0, "bf": 9,  "hbp": 0, "hr": 0},
+    {"name": "Cameron B #14", "ip": "4.1", "h": 4, "r": 4, "er": 4, "bb": 1, "so": 4, "pitches": 69, "strikes": 41, "bf": 20, "hbp": 1, "hr": 0},
+    {"name": "Caiden R #12",  "ip": "1.2", "h": 3, "r": 0, "er": 0, "bb": 1, "so": 1, "pitches": 24, "strikes": 15, "bf": 7,  "hbp": 0, "hr": 0},
 ]
