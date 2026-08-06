@@ -10,9 +10,17 @@
 #   2. Encrypts the hub + every team page with StatiCrypt (one shared salt,
 #      so a single password unlock covers the whole site).
 #   3. Safety-checks that nothing is left in plaintext, then commits + pushes.
+#   4. Verifies the change actually reached the live site, by comparing the
+#      served bytes against HEAD. Exits non-zero if the site is still stale.
 #
-# Requires: python3, node/npx, and git push access (configure a credential
-# helper or a token in the remote URL once).
+# Step 4 exists because a green `git push` proved nothing: on 2026-08-06 three
+# publishes pushed fine while GitHub Pages failed every build, and this script
+# reported "✅ Live" all three times to a site that was five weeks out of date.
+#
+# Requires: python3, node/npx, curl, and git push access (configure a credential
+# helper or a token in the remote URL once). `gh` is optional — used to read the
+# deploy workflow's conclusion; without it, verification falls back to the
+# served-bytes comparison alone.
 set -e
 cd "$(dirname "$0")"
 
@@ -75,7 +83,7 @@ if ls scouting/*.html >/dev/null 2>&1; then
   ENC scouting/*.html -d scouting
 fi
 
-echo "▶ 3/3  Safety check + push..."
+echo "▶ 3/4  Safety check + push..."
 # Positive assertion: EVERY .html must carry the staticrypt marker. The old check
 # grepped for "<h1>2026", which only matches team pages — a plaintext scouting
 # report (<h1>Crabs vs NOLL ...>) would have passed straight through it.
@@ -89,10 +97,48 @@ if [ -n "$LEAK" ]; then
   exit 1
 fi
 git add -A
-if git diff --cached --quiet; then echo "Nothing changed — nothing to push."; exit 0; fi
-git commit -m "Update hub — $(date '+%Y-%m-%d %H:%M')"
-git push
+if git diff --cached --quiet; then
+  echo "    nothing changed — skipping commit (still verifying what is live)"
+else
+  git commit -m "Update hub — $(date '+%Y-%m-%d %H:%M')"
+  git push
+fi
 
-echo ""
-echo "✅  Live (password-protected) at https://russfagaly.github.io/crabs/"
-echo "    (GitHub Pages refreshes in ~30-60s)"
+echo "▶ 4/4  Verifying the deploy actually reached the live site..."
+# A successful `git push` does NOT mean the site updated. On 2026-08-06, three
+# consecutive publishes pushed cleanly while every GitHub Pages build failed, so
+# the live site sat five weeks stale while this script cheerfully printed
+# "✅ Live" each time. Never claim success without comparing the served bytes.
+SITE="https://russfagaly.github.io/crabs/"
+WANT=$(git show HEAD:index.html | shasum -a 256 | cut -d' ' -f1)
+
+# Wait for the deploy workflow first, when gh is available — gives a real
+# conclusion instead of inferring everything from the served bytes.
+if command -v gh >/dev/null 2>&1; then
+  for _ in $(seq 1 30); do
+    ST=$(gh run list --workflow="Deploy Pages" --limit 1 --json status --jq '.[0].status' 2>/dev/null || echo "")
+    [ "$ST" = "completed" ] && break
+    sleep 10
+  done
+  CONC=$(gh run list --workflow="Deploy Pages" --limit 1 --json conclusion --jq '.[0].conclusion' 2>/dev/null || echo "unknown")
+  echo "    deploy workflow: ${ST:-unknown} / ${CONC:-unknown}"
+fi
+
+for _ in $(seq 1 20); do
+  GOT=$(curl -s --max-time 20 "$SITE" | shasum -a 256 | cut -d' ' -f1)
+  if [ "$GOT" = "$WANT" ]; then
+    echo ""
+    echo "✅  VERIFIED LIVE (password-protected) at $SITE"
+    echo "    served bytes match HEAD ($(git rev-parse --short HEAD))"
+    exit 0
+  fi
+  sleep 15
+done
+
+echo "" >&2
+echo "⚠️  PUSHED, BUT NOT LIVE." >&2
+echo "    The commit is on origin/main, but $SITE is still serving different" >&2
+echo "    bytes than HEAD. The publish did NOT reach users. Check:" >&2
+echo "      gh run list --workflow='Deploy Pages'" >&2
+echo "      https://www.githubstatus.com   (Actions/Pages outages hit us before)" >&2
+exit 4
