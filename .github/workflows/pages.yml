@@ -1,0 +1,63 @@
+# Deploy the encrypted hub to GitHub Pages.
+#
+# Replaces the legacy Pages builder, which failed with an opaque "Page build
+# failed." and gave no logs. This workflow publishes the repo root as a static
+# site (same as legacy did) but surfaces real build output when something breaks.
+#
+# publish.sh still does the real work — regenerate, encrypt, commit, push. This
+# only takes what is already committed and deploys it.
+name: Deploy Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never run two deploys at once; let an in-flight one finish rather than
+# cancelling, so a half-deployed site is never left live.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # macOS writes custom-folder-icon files named "Icon\r" (trailing carriage
+      # return). They are tracked in this repo and serve no purpose on the web.
+      # Drop them from the artifact — a CR in a filename is exactly the kind of
+      # thing that upsets tar/upload steps.
+      - name: Strip macOS cruft
+        run: |
+          find . -name 'Icon'$'\r' -delete 2>/dev/null || true
+          find . -name '.DS_Store' -delete 2>/dev/null || true
+          find . -name '__pycache__' -type d -prune -exec rm -rf {} + 2>/dev/null || true
+
+      - name: Verify every page is encrypted
+        run: |
+          leak=0
+          while IFS= read -r f; do
+            grep -q staticrypt "$f" || { echo "UNENCRYPTED: $f"; leak=1; }
+          done < <(find . -path ./.git -prune -o -name '*.html' -print)
+          if [ "$leak" -ne 0 ]; then
+            echo "::error::Refusing to deploy — plaintext pages found."
+            exit 1
+          fi
+          echo "All pages encrypted."
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
