@@ -66,6 +66,62 @@ The regular season spreadsheet had an All-Star Tracker tab that showed L5 (last 
 
 ---
 
+## Publishing & Encryption
+
+### Never Re-Encrypt an Already-Encrypted Page
+**Problem:** `publish.sh` encrypted `scouting/*.html` on every run. Team pages are
+safe because `build_hub.py` rewrites them as fresh plaintext first, so each
+encryption starts from plaintext. The scouting reports have no generator — they
+are static, hand-authored files — so every publish encrypted the *previous
+ciphertext*, nesting another layer and roughly doubling the file:
+
+```
+60 KB → 158 KB → 354 KB → 745 KB → 1.5 MB → 3.1 MB → 6.2 MB → 12.5 MB → 25 MB → 50 MB
+```
+
+After nine publishes the Crabs-vs-NOLL report was 48.9 MB and large enough to
+crash node mid-publish (`Abort trap: 6`), which aborted the whole push.
+
+**Rule:** `ENC` skips any file already containing the `staticrypt` marker.
+Anything StatiCrypt touches must be freshly generated plaintext, or guarded.
+
+**The tell:** a page that grows ~2x every publish. `lightning/scouting.html` is
+the control — it *is* regenerated each run and has held steady at ~72 KB.
+
+### The Leak Check Must Be a Positive Assertion
+**Problem:** the pre-push safety check was `grep -rl "<h1>2026"`, which only
+matches team pages. A plaintext scouting report (`<h1>🦀 Crabs vs NOLL ...`) did
+not match, so it would have passed the check and been published unencrypted.
+**Rule:** assert that every `.html` *contains* the staticrypt marker. Never test
+for a plaintext signature — you can only enumerate the shapes you thought of,
+and the one you forget is the one that leaks.
+
+### Keep a Plaintext Source for Anything Hand-Authored
+**Problem:** the scouting reports were only ever committed in encrypted form.
+When they had to be rebuilt, the original HTML existed nowhere — not in the repo,
+not in history.
+**Rule:** every published page should be reproducible from something in the repo —
+a generator (like the team dashboards) or a plaintext source. If the content is
+hand-authored and must stay private, keep an off-repo copy at minimum.
+
+### Recovering a StatiCrypt Page (if it ever comes to that)
+It is recoverable. The decryption code ships inside the encrypted page itself.
+StatiCrypt v3 derives the key in three chained PBKDF2 rounds, then AES-256-CBC:
+
+```
+k = PBKDF2-HMAC-SHA1  (password, salt,   1000) -> 32B, as hex
+k = PBKDF2-HMAC-SHA256(k,        salt,  14000) -> 32B, as hex
+k = PBKDF2-HMAC-SHA256(k,        salt, 585000) -> 32B  = AES key
+```
+
+The payload is the long hex blob in the page: first 32 hex chars are the IV, the
+rest is ciphertext. Salt lives in `.staticrypt.json`. Decrypt with
+`openssl enc -d -aes-256-cbc -K <key> -iv <iv>`, then slice from `<!DOCTYPE` —
+a few leading bytes are decryption artifacts. For a multi-layer file, recover the
+*earliest* version from git history instead; it has the fewest layers to peel.
+
+---
+
 ## Stats Insights from the Regular Season
 
 ### OPS vs. OPS+
