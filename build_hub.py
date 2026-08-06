@@ -8,10 +8,11 @@ MARK = "hub-switcher-v1"
 
 # (slug, switcher_label, card_title, card_meta, accent, record_token)
 TEAMS = [
-    ("alameda_districts", "Alameda Crabs",    "Alameda Crabs",       "12U All-Stars · District tournament", "#f97316", "Alameda"),
+    ("alameda_districts", "Alameda Crabs",    "Alameda Crabs",       "12U All-Stars · Districts",           "#f97316", "Alameda"),
     ("alameda",           "Crabs Scrimmages", "Crabs Scrimmages",    "12U All-Stars · 9 scrimmages",        "#fb7185", "Alameda"),
     ("noll",              "NOLL",             "NOLL",                "North Oakland 12U · Districts",        "#22d3ee", "NOLL"),
-    ("lightning",         "Lightning",        "Lafayette Lightning", "12U · 9 games · scouting",             "#fbbf24", "Lightning"),
+    ("lightning",         "Lightning",        "Lafayette Lightning", "12U · 9 games · Cooperstown",          "#fbbf24", "Lightning"),
+    ("projectmill",       "Project Mill",     "Project Mill Cooperstown", "12U · 3 games · Cooperstown",     "#a78bfa", "Project Mill"),
     ("soll",              "SOLL",             "SOLL",                "South Oakland 12U · Districts",        "#34d399", "SOLL"),
 ]
 
