@@ -28,7 +28,30 @@ python3 build_hub.py
 
 echo "▶ 2/3  Encrypting (shared salt = single login)..."
 SALT='{"salt":"a793b1e16bd36057b6679fa4e990a233"}'
-ENC() { npx --yes staticrypt@3 "$@" -c .staticrypt.json --remember 365 --short >/dev/null 2>&1; }
+# ENC — encrypt the given .html files, SKIPPING any that are already encrypted.
+#
+# This guard is essential. Team pages are safe without it because build_hub.py
+# rewrites them as fresh plaintext on every run, so each encryption starts from
+# plaintext. The scouting reports in scouting/ have no generator — they are
+# static, hand-authored files. Without this guard every publish re-encrypted the
+# previous ciphertext, nesting a new layer and ~doubling the file each time
+# (60 KB -> 50 MB over nine publishes, which eventually crashed node).
+ENC() {
+  local files=() rest=() f expect_val=0
+  for f in "$@"; do
+    if [ $expect_val -eq 1 ]; then rest+=("$f"); expect_val=0; continue; fi
+    case "$f" in
+      -*) rest+=("$f"); expect_val=1 ;;
+      *)  if grep -q "staticrypt" "$f" 2>/dev/null; then
+            echo "      skip (already encrypted): $f"
+          else
+            files+=("$f")
+          fi ;;
+    esac
+  done
+  if [ ${#files[@]} -eq 0 ]; then return 0; fi
+  npx --yes staticrypt@3 "${files[@]}" "${rest[@]}" -c .staticrypt.json --remember 365 --short >/dev/null 2>&1
+}
 echo "$SALT" > .staticrypt.json
 ENC index.html -d .
 # auto-detect team folders (any dir with a pipeline/ and an index.html)
@@ -53,7 +76,13 @@ if ls scouting/*.html >/dev/null 2>&1; then
 fi
 
 echo "▶ 3/3  Safety check + push..."
-LEAK=$(grep -rl "<h1>2026" --include=*.html . || true)
+# Positive assertion: EVERY .html must carry the staticrypt marker. The old check
+# grepped for "<h1>2026", which only matches team pages — a plaintext scouting
+# report (<h1>Crabs vs NOLL ...>) would have passed straight through it.
+LEAK=""
+while IFS= read -r f; do
+  grep -q "staticrypt" "$f" || LEAK="${LEAK}${f}"$'\n'
+done < <(find . -path ./.git -prune -o -name '*.html' -print)
 if [ -n "$LEAK" ]; then
   echo "ERROR: these pages are still UNENCRYPTED — aborting before push:" >&2
   echo "$LEAK" >&2

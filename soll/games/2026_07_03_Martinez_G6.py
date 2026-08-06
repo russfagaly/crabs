@@ -5,11 +5,6 @@ Date:     07/03
 Round:    Districts
 Result:   L  1-4
 Field:    TBD
-
-NOTE: player SO rows sum to 6; the GameChanger TEAM row reads 7. AB/R/H/RBI/BB/E
-all reconcile exactly, so this is a single-cell read, not a scoring anomaly (a
-missing batter would raise AB too). Rows entered as read. Check the Plays tab and
-patch the one SO if it turns out to be 7.
 """
 TEAM = "SOLL"
 DATE = "2026-07-03"
@@ -24,7 +19,7 @@ hitting = [
     {"name": "Arlo B #5",     "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
     {"name": "Elias G #4",    "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 2, "hbp": 0, "pqab_bonus": 0},
     {"name": "Malikiel O #13","ab": 1, "r": 0, "h": 0, "rbi": 0, "bb": 1, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 1, "hbp": 0, "pqab_bonus": 0},
-    {"name": "Clive A #8",    "ab": 2, "r": 0, "h": 1, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
+    {"name": "Clive A #8",    "ab": 2, "r": 0, "h": 1, "rbi": 0, "bb": 0, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
     {"name": "Thiago S #9",   "ab": 1, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
 ]
 
