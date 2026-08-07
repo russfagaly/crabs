@@ -14,6 +14,7 @@ TEAMS = [
     ("lightning",         "Lightning",        "Lafayette Lightning", "12U · 9 games · Cooperstown",          "#fbbf24", "Lightning"),
     ("projectmill",       "Project Mill",     "Project Mill Cooperstown", "12U · 5 games · Cooperstown",     "#a78bfa", "Project Mill"),
     ("soll",              "SOLL",             "SOLL",                "South Oakland 12U · Districts",        "#34d399", "SOLL"),
+    ("roaddogs",          "Road Dogs",        "Road Dogs 12",        "12U · 8 games · Tournaments",          "#e879f9", "Road Dogs"),
 ]
 
 # Scouting reports (newest first). Drop the HTML in scouting/ then add a line.
