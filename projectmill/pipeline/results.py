@@ -15,9 +15,13 @@ GAMES = [
     {"date": "2026-08-05", "away": "Morrisville Riverdogs 12U", "home": "Project Mill",
      "away_score": 13, "home_score": 2, "winner": "Morrisville Riverdogs 12U",
      "field": "Cooperstown All Star Village", "round": "Cooperstown"},
-    # 08/06 — Project Mill home (batted bottom)
+    # 08/06 G1 — Project Mill home (batted bottom)
     {"date": "2026-08-06", "away": "Lake Washington 12U", "home": "Project Mill",
      "away_score": 14, "home_score": 3, "winner": "Lake Washington 12U",
+     "field": "Cooperstown All Star Village", "round": "Cooperstown"},
+    # 08/06 G2 — Project Mill away (batted top); led 10-8, lost on a walk-off
+    {"date": "2026-08-06", "away": "Project Mill", "home": "Canes Triad Gold 12U",
+     "away_score": 10, "home_score": 11, "winner": "Canes Triad Gold 12U",
      "field": "Cooperstown All Star Village", "round": "Cooperstown"},
 ]
 

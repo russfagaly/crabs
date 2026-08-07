@@ -12,7 +12,7 @@ TEAMS = [
     ("alameda",           "Crabs Scrimmages", "Crabs Scrimmages",    "12U All-Stars · 9 scrimmages",        "#fb7185", "Alameda"),
     ("noll",              "NOLL",             "NOLL",                "North Oakland 12U · Districts",        "#22d3ee", "NOLL"),
     ("lightning",         "Lightning",        "Lafayette Lightning", "12U · 9 games · Cooperstown",          "#fbbf24", "Lightning"),
-    ("projectmill",       "Project Mill",     "Project Mill Cooperstown", "12U · 3 games · Cooperstown",     "#a78bfa", "Project Mill"),
+    ("projectmill",       "Project Mill",     "Project Mill Cooperstown", "12U · 4 games · Cooperstown",     "#a78bfa", "Project Mill"),
     ("soll",              "SOLL",             "SOLL",                "South Oakland 12U · Districts",        "#34d399", "SOLL"),
 ]
 
