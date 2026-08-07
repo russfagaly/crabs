@@ -23,6 +23,10 @@ GAMES = [
     {"date": "2026-08-06", "away": "Project Mill", "home": "Canes Triad Gold 12U",
      "away_score": 10, "home_score": 11, "winner": "Canes Triad Gold 12U",
      "field": "Cooperstown All Star Village", "round": "Cooperstown"},
+    # 08/07 — Project Mill away (batted top); first win, Issa R complete game
+    {"date": "2026-08-07", "away": "Project Mill", "home": "AHQ Illinois Cooperstown",
+     "away_score": 4, "home_score": 2, "winner": "Project Mill",
+     "field": "Cooperstown All Star Village", "round": "Cooperstown"},
 ]
 
 
