@@ -8,13 +8,9 @@ Field:    TBD
 Note:     Road Dogs were the AWAY team (batted top). Tied 5-5 into the bottom of
           the 6th; East Bay walked it off on a Quentin T single.
 
-NOTE — two cells do not reconcile against the GameChanger TEAM row:
-  · batting R:  rows sum to 4, TEAM row AND the line score both read 5 (under-read by 1)
-  · batting SO: rows sum to 5, TEAM row reads 7                        (under-read by 2)
-The run total is independently confirmed by the line score (BRKR 2 0 1 0 2 0 = 5),
-so a player run is definitely missing. AB/H/RBI/BB reconcile exactly, total bases
-tie out at 3 (all singles), and the 2 errors match the line score. All pitching
-reconciles. Rows entered as read — worth a Plays-tab check.
+Corrected 2026-08-07 from a scorebook check: added a run for Lennon D (R now 5,
+matching both the TEAM row and the line score) and strikeouts for Miles D and
+Carter F (SO now 7). Every batting and pitching column reconciles.
 """
 TEAM = "Road Dogs"
 DATE = "2026-06-13"
@@ -24,10 +20,10 @@ hitting = [
     {"name": "Julius N #30", "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 2, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 1, "hbp": 0, "pqab_bonus": 0},
     {"name": "Sam G #12",    "ab": 2, "r": 1, "h": 1, "rbi": 0, "bb": 0, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
     {"name": "Oliver R #13", "ab": 2, "r": 0, "h": 1, "rbi": 1, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 1, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
-    {"name": "Miles D #24",  "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
+    {"name": "Miles D #24",  "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
     {"name": "Carver D #6",  "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
-    {"name": "Carter F #5",  "ab": 1, "r": 1, "h": 0, "rbi": 0, "bb": 1, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 1, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
-    {"name": "Lennon D #34", "ab": 1, "r": 0, "h": 0, "rbi": 0, "bb": 1, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 1, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
+    {"name": "Carter F #5",  "ab": 1, "r": 1, "h": 0, "rbi": 0, "bb": 1, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 1, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
+    {"name": "Lennon D #34", "ab": 1, "r": 1, "h": 0, "rbi": 0, "bb": 1, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 1, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
     {"name": "Hudson P #2",  "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 1, "cs": 1, "e": 1, "hbp": 0, "pqab_bonus": 0},
     {"name": "Julian W #22", "ab": 2, "r": 1, "h": 0, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
     {"name": "Jonah M #4",   "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},

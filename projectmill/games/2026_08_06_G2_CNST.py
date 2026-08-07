@@ -8,11 +8,9 @@ Field:    Cooperstown All Star Village
 Note:     Project Mill were the AWAY team (batted top). Led 10-8 into the bottom
           of the 5th; Canes walked it off, with an error scoring three runs.
 
-NOTE: two cells under-read by 1 each. Player RBI rows sum to 5 and SO rows to 6,
-while the GameChanger TEAM row reads 6 RBI / 7 SO. AB/R/H/BB and the error total
-all reconcile exactly, and total bases tie out at 11 (all singles), so these are
-single-cell reads, not scoring anomalies. Rows entered as read — check the Plays
-tab and patch the missing RBI and K.
+Corrected 2026-08-07 from a scorebook check: added an RBI for Jonah L (RBI now 6)
+and a strikeout for Carter F (SO now 7). Every batting and pitching column
+reconciles against the TEAM row.
 """
 TEAM = "Project Mill"
 DATE = "2026-08-06"
@@ -24,9 +22,9 @@ hitting = [
     {"name": "Dylan C #7",     "ab": 2, "r": 0, "h": 1, "rbi": 1, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 1, "hbp": 1, "pqab_bonus": 0},
     {"name": "Zach B #27",     "ab": 2, "r": 1, "h": 0, "rbi": 0, "bb": 1, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 2, "cs": 0, "e": 1, "hbp": 0, "pqab_bonus": 0},
     {"name": "Nico Y #18",     "ab": 2, "r": 2, "h": 0, "rbi": 0, "bb": 1, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 3, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
-    {"name": "Carter F #23",   "ab": 3, "r": 2, "h": 1, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 2, "cs": 0, "e": 1, "hbp": 0, "pqab_bonus": 0},
+    {"name": "Carter F #23",   "ab": 3, "r": 2, "h": 1, "rbi": 0, "bb": 0, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 2, "cs": 0, "e": 1, "hbp": 0, "pqab_bonus": 0},
     {"name": "Charlie V #45",  "ab": 2, "r": 0, "h": 2, "rbi": 1, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 1, "hbp": 1, "pqab_bonus": 0},
-    {"name": "Jonah L #26",    "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 1, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
+    {"name": "Jonah L #26",    "ab": 2, "r": 0, "h": 0, "rbi": 1, "bb": 1, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
     {"name": "Abraham S #6",   "ab": 2, "r": 1, "h": 1, "rbi": 0, "bb": 1, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 1, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
     {"name": "Mark (Jr) G #13","ab": 3, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
 ]

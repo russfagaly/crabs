@@ -9,10 +9,8 @@ Note:     Road Dogs were the HOME team (batted bottom). Five-run LLL first ended
           it early. Only two hits on the day — the quietest offensive game of the
           set. All six LLL runs were unearned.
 
-NOTE — one cell does not reconcile:
-  · batting SO: rows sum to 5, TEAM row reads 6 (under-read by 1)
-Everything else ties out: AB, R, H, RBI, BB, total bases (2, all singles), the
-single steal, and the 2 errors match the line score. All pitching reconciles.
+Corrected 2026-08-07 from a scorebook check: added a strikeout for Sam G
+(SO now 6). Every batting and pitching column reconciles.
 """
 TEAM = "Road Dogs"
 DATE = "2026-07-17"
@@ -22,7 +20,7 @@ hitting = [
     {"name": "Carver D #6",  "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 1, "hbp": 0, "pqab_bonus": 0},
     {"name": "Carter F #5",  "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
     {"name": "Oliver R #13", "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
-    {"name": "Sam G #12",    "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
+    {"name": "Sam G #12",    "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
     {"name": "Lennon D #34", "ab": 1, "r": 0, "h": 0, "rbi": 0, "bb": 1, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
     {"name": "Julian W #22", "ab": 1, "r": 0, "h": 0, "rbi": 0, "bb": 1, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 1, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
     {"name": "Jonah M #4",   "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},

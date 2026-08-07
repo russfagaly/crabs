@@ -12,10 +12,8 @@ Jonah M's hit was recovered from the TB note ("Jonah M 1") — the lineup row re
 as 0 H, but with his single the hit total reconciles to the TEAM row's 9, and
 total bases tie out at 15 against the 3 doubles + Oliver R's home run.
 
-NOTE — one cell still does not reconcile:
-  · batting RBI: rows sum to 8, TEAM row reads 7 (over-read by 1)
-Everything else ties out: AB, R, H, BB, SO, TB, and the 5 errors match the line
-score. All pitching reconciles. Worth a Plays-tab check.
+Corrected 2026-08-07 from a scorebook check: removed an RBI from Carter F
+(RBI now 7). Every batting and pitching column reconciles.
 """
 TEAM = "Road Dogs"
 DATE = "2026-06-14"
@@ -24,7 +22,7 @@ hitting = [
     {"name": "Zach C #3",    "ab": 3, "r": 1, "h": 1, "rbi": 0, "bb": 0, "so": 1, "doubles": 1, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
     {"name": "Julius N #30", "ab": 2, "r": 0, "h": 1, "rbi": 1, "bb": 1, "so": 0, "doubles": 1, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 1, "hbp": 0, "pqab_bonus": 0},
     {"name": "Sam G #12",    "ab": 3, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 1, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
-    {"name": "Carter F #5",  "ab": 2, "r": 1, "h": 1, "rbi": 1, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 1, "hbp": 0, "pqab_bonus": 0},
+    {"name": "Carter F #5",  "ab": 2, "r": 1, "h": 1, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 1, "hbp": 0, "pqab_bonus": 0},
     {"name": "Oliver R #13", "ab": 1, "r": 2, "h": 1, "rbi": 2, "bb": 1, "so": 0, "doubles": 0, "triples": 0, "hr": 1, "sb": 0, "cs": 0, "e": 1, "hbp": 0, "pqab_bonus": 0},
     {"name": "Sammy E #11",  "ab": 2, "r": 0, "h": 0, "rbi": 0, "bb": 0, "so": 2, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 0, "hbp": 0, "pqab_bonus": 0},
     {"name": "Jonah M #4",   "ab": 2, "r": 2, "h": 1, "rbi": 0, "bb": 0, "so": 0, "doubles": 0, "triples": 0, "hr": 0, "sb": 0, "cs": 0, "e": 1, "hbp": 0, "pqab_bonus": 0},
