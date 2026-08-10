@@ -12,9 +12,9 @@ TEAMS = [
     ("alameda",           "Crabs Scrimmages", "Crabs Scrimmages",    "12U All-Stars · 9 scrimmages",        "#fb7185", "Alameda"),
     ("noll",              "NOLL",             "NOLL",                "North Oakland 12U · Districts",        "#22d3ee", "NOLL"),
     ("lightning",         "Lightning",        "Lafayette Lightning", "12U · 9 games · Cooperstown",          "#fbbf24", "Lightning"),
-    ("projectmill",       "Pono Cooperstown", "Project Mill Cooperstown", "12U · 5 games · Cooperstown",     "#a78bfa", "Project Mill"),
+    ("projectmill",       "Pono Cooperstown", "Project Mill Cooperstown", "12U · 7 games · Cooperstown",     "#a78bfa", "Project Mill"),
     ("soll",              "SOLL",             "SOLL",                "South Oakland 12U · Districts",        "#34d399", "SOLL"),
-    ("roaddogs",          "Road Dogs",        "Road Dogs 12",        "12U · 8 games · Tournaments",          "#e879f9", "Road Dogs"),
+    ("roaddogs",          "Road Dogs",        "Road Dogs 12",        "12U · 11 games · Tournaments",         "#e879f9", "Road Dogs"),
 ]
 
 # Scouting reports (newest first). Drop the HTML in scouting/ then add a line.

@@ -26,4 +26,6 @@ ROSTER = [
     {"full": "Miles M",  "short": "Miles M",  "jersey": 7,  "confirmed": True},
     # First appears 07/19 vs Piedmont, where he started and threw 3.2 innings.
     {"full": "Huston G", "short": "Huston G", "jersey": 20, "confirmed": True},
+    # First appears 08/08 vs No Limit Ohana: 3-for-3, triple, 4 RBI.
+    {"full": "Kaleo P",  "short": "Kaleo P",  "jersey": 10, "confirmed": True},
 ]

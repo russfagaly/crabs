@@ -23,9 +23,18 @@ GAMES = [
     {"date": "2026-08-06", "away": "Project Mill", "home": "Canes Triad Gold 12U",
      "away_score": 10, "home_score": 11, "winner": "Canes Triad Gold 12U",
      "field": "Cooperstown All Star Village", "round": "Cooperstown"},
-    # 08/07 — Project Mill away (batted top); first win, Issa R complete game
+    # 08/07 G1 — Project Mill away (batted top); first win, Issa R complete game
     {"date": "2026-08-07", "away": "Project Mill", "home": "AHQ Illinois Cooperstown",
      "away_score": 4, "home_score": 2, "winner": "Project Mill",
+     "field": "Cooperstown All Star Village", "round": "Cooperstown"},
+    # 08/07 G2 — Project Mill home (batted bottom); run-ruled, Noah C solo HR
+    # Order confirmed: AHQ was played first, HFLA second.
+    {"date": "2026-08-07", "away": "HFLA 12U BLACK", "home": "Project Mill",
+     "away_score": 10, "home_score": 5, "winner": "HFLA 12U BLACK",
+     "field": "Cooperstown All Star Village", "round": "Cooperstown"},
+    # 08/08 — Project Mill home (batted bottom); four home runs, seven-run first
+    {"date": "2026-08-08", "away": "Catskill Mountain Base Invaders", "home": "Project Mill",
+     "away_score": 13, "home_score": 11, "winner": "Catskill Mountain Base Invaders",
      "field": "Cooperstown All Star Village", "round": "Cooperstown"},
 ]
 

@@ -40,6 +40,18 @@ GAMES = [
     {"date": "2026-07-19", "away": "Road Dogs", "home": "Piedmont Cobras 12U",
      "away_score": 6, "home_score": 2, "winner": "Road Dogs",
      "field": "Buckeye Field, Lafayette", "round": "Tournament"},
+    # 08/08 G1 — Road Dogs home (batted bottom); run-ruled after four, 13 hits
+    {"date": "2026-08-08", "away": "No Limit Ohana 12U", "home": "Road Dogs",
+     "away_score": 2, "home_score": 13, "winner": "Road Dogs",
+     "field": "TBD", "round": "Tournament"},
+    # 08/08 G2 — Road Dogs home (batted bottom); seven-run second, run-ruled
+    {"date": "2026-08-08", "away": "HBB 12U Summer 2026", "home": "Road Dogs",
+     "away_score": 3, "home_score": 12, "winner": "Road Dogs",
+     "field": "TBD", "round": "Tournament"},
+    # 08/09 — Road Dogs home (batted bottom); Kaleo P home run, Extreme had 17 hits
+    {"date": "2026-08-09", "away": "Extreme 12U", "home": "Road Dogs",
+     "away_score": 12, "home_score": 9, "winner": "Extreme 12U",
+     "field": "TBD", "round": "Tournament"},
 ]
 
 
