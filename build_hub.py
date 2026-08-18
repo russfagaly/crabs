@@ -24,6 +24,15 @@ REPORTS = [
     ("2026-06-29_crabs-vs-noll.html", "Crabs vs NOLL", "District tournament · pre-game scouting", "Jun 29, 2026"),
 ]
 
+# Standalone pages: a directory with its own index.html and NO team pipeline.
+# They get a switcher tab and a row on the hub landing, but no record or card —
+# record() would crash on them since there is no results.py/get_record().
+# (dir, tab_label, title, subtitle, date_label)
+PAGES = [
+    ("pitching", "Spring Pitching", "Last Four Pitching Appearances",
+     "Alameda LL Majors \u00b7 spring regular season", "Aug 18, 2026"),
+]
+
 def sh(cmd, cwd): return subprocess.run(cmd, cwd=cwd, shell=True, capture_output=True, text=True)
 
 def record(slug):
@@ -36,6 +45,9 @@ def record(slug):
 def nav(active):
     links = ['<a href="../" style="color:#8b949e;text-decoration:none;padding:6px 11px;border-radius:6px">&#127968; Home</a>']
     for slug,label,*_ in TEAMS:
+        st = "background:#238636;color:#fff" if slug==active else "color:#c9d1d9;background:#21262d"
+        links.append(f'<a href="../{slug}/" style="text-decoration:none;padding:6px 11px;border-radius:6px;{st}">{label}</a>')
+    for slug,label,*_ in PAGES:
         st = "background:#238636;color:#fff" if slug==active else "color:#c9d1d9;background:#21262d"
         links.append(f'<a href="../{slug}/" style="text-decoration:none;padding:6px 11px;border-radius:6px;{st}">{label}</a>')
     return (f'<div class="{MARK}" style="position:sticky;top:0;z-index:99999;background:#0d1117;'
@@ -69,6 +81,12 @@ for fp in glob.glob(os.path.join(ROOT,"scouting","*.html")):
     inject(fp, "")
 print(f"  scouting reports: {len(REPORTS)}")
 
+# 2b. inject switcher into standalone pages
+for slug,*_ in PAGES:
+    fp = os.path.join(ROOT, slug, "index.html")
+    if os.path.exists(fp): inject(fp, slug)
+print(f"  standalone pages: {len(PAGES)}")
+
 # 3. build hub landing
 cards = ""
 for slug,label,title,meta,accent,token in TEAMS:
@@ -80,16 +98,18 @@ for slug,label,title,meta,accent,token in TEAMS:
   </a>\n'''
 
 reports_html = ""
-if REPORTS:
+_rows = [(f"./scouting/{fn}", title, sub, dt) for fn,title,sub,dt in REPORTS]
+_rows += [(f"./{slug}/", title, sub, dt) for slug,label,title,sub,dt in PAGES]
+if _rows:
     rows = ""
-    for fn,title,sub,dt in REPORTS:
-        rows += f'''    <a class="report" href="./scouting/{fn}">
+    for href,title,sub,dt in _rows:
+        rows += f'''    <a class="report" href="{href}">
       <div class="rdate">{dt}</div>
       <div class="rmain"><div class="rtitle">{title}</div><div class="rsub">{sub}</div></div>
       <div class="rarrow">&rarr;</div>
     </a>\n'''
     reports_html = f'''<section class="reports-wrap">
-  <h2 class="shead">&#128270; Scouting Reports</h2>
+  <h2 class="shead">&#128270; Reports</h2>
   <div class="reports">
 {rows}  </div>
 </section>'''

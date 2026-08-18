@@ -83,6 +83,17 @@ if ls scouting/*.html >/dev/null 2>&1; then
   ENC scouting/*.html -d scouting
 fi
 
+# standalone pages: a dir with its own index.html but no pipeline/ (e.g. pitching/).
+# The team loop above requires pipeline/, so these would otherwise be skipped and
+# ship UNENCRYPTED. Auto-detected so future standalone pages are covered too.
+for d in */ ; do
+  t=${d%/}
+  [ -f "$t/index.html" ] && [ ! -d "$t/pipeline" ] || continue
+  echo "    · $t (standalone page)"
+  echo "$SALT" > "$t/.staticrypt.json"
+  ENC "$t/index.html" -d "$t"
+done
+
 echo "▶ 3/4  Safety check + push..."
 # Positive assertion: EVERY .html must carry the staticrypt marker. The old check
 # grepped for "<h1>2026", which only matches team pages — a plaintext scouting
