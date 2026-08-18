@@ -2,6 +2,7 @@
 # build_hub.py — regenerate every team, inject the switcher, rebuild the hub
 # landing (team cards + Scouting Reports section). Run from repo root.
 import glob, os, subprocess, importlib.util
+from datetime import datetime
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 MARK = "hub-switcher-v1"
@@ -100,6 +101,15 @@ for slug,label,title,meta,accent,token in TEAMS:
 reports_html = ""
 _rows = [(f"./scouting/{fn}", title, sub, dt) for fn,title,sub,dt in REPORTS]
 _rows += [(f"./{slug}/", title, sub, dt) for slug,label,title,sub,dt in PAGES]
+
+# Newest first across BOTH sources. Without this the standalone pages simply got
+# appended after the scouting reports, so a newer page sorted below older ones —
+# which reads as missing when you scan the top of a newest-first list.
+def _date_key(label):
+    try: return datetime.strptime(label, "%b %d, %Y")
+    except ValueError: return datetime.min
+_rows.sort(key=lambda r: _date_key(r[3]), reverse=True)
+
 if _rows:
     rows = ""
     for href,title,sub,dt in _rows:
