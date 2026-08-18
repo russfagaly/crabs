@@ -25,9 +25,11 @@ REPORTS = [
 ]
 
 # Standalone pages: a directory with its own index.html and NO team pipeline.
-# They get a switcher tab and a row on the hub landing, but no record or card —
-# record() would crash on them since there is no results.py/get_record().
-# (dir, tab_label, title, subtitle, date_label)
+# Listed under Reports on the hub landing; they do NOT get a header tab, and they
+# carry no record or card — record() would crash on them, there being no
+# results.py/get_record(). They do get the switcher injected so a reader can
+# navigate back out, same as the scouting reports.
+# (dir, label, title, subtitle, date_label)  -- label is unused for now
 PAGES = [
     ("pitching", "Spring Pitching", "Last Four Pitching Appearances",
      "Alameda LL Majors \u00b7 spring regular season", "Aug 18, 2026"),
@@ -45,9 +47,6 @@ def record(slug):
 def nav(active):
     links = ['<a href="../" style="color:#8b949e;text-decoration:none;padding:6px 11px;border-radius:6px">&#127968; Home</a>']
     for slug,label,*_ in TEAMS:
-        st = "background:#238636;color:#fff" if slug==active else "color:#c9d1d9;background:#21262d"
-        links.append(f'<a href="../{slug}/" style="text-decoration:none;padding:6px 11px;border-radius:6px;{st}">{label}</a>')
-    for slug,label,*_ in PAGES:
         st = "background:#238636;color:#fff" if slug==active else "color:#c9d1d9;background:#21262d"
         links.append(f'<a href="../{slug}/" style="text-decoration:none;padding:6px 11px;border-radius:6px;{st}">{label}</a>')
     return (f'<div class="{MARK}" style="position:sticky;top:0;z-index:99999;background:#0d1117;'
@@ -81,10 +80,11 @@ for fp in glob.glob(os.path.join(ROOT,"scouting","*.html")):
     inject(fp, "")
 print(f"  scouting reports: {len(REPORTS)}")
 
-# 2b. inject switcher into standalone pages
+# 2b. inject switcher into standalone pages. active="" — these are listed under
+# Reports on the hub landing, not given their own tab, so no tab is highlighted.
 for slug,*_ in PAGES:
     fp = os.path.join(ROOT, slug, "index.html")
-    if os.path.exists(fp): inject(fp, slug)
+    if os.path.exists(fp): inject(fp, "")
 print(f"  standalone pages: {len(PAGES)}")
 
 # 3. build hub landing
