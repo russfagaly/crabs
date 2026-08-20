@@ -33,7 +33,7 @@ REPORTS = [
 # (dir, label, title, subtitle, date_label)  -- label is unused for now
 PAGES = [
     ("pitching", "Spring Pitching", "Last Four Pitching Appearances",
-     "Alameda LL Majors \u00b7 spring regular season", "Aug 18, 2026"),
+     "Alameda LL Majors \u00b7 full season incl. playoffs", "Aug 20, 2026"),
 ]
 
 def sh(cmd, cwd): return subprocess.run(cmd, cwd=cwd, shell=True, capture_output=True, text=True)
@@ -80,6 +80,20 @@ for slug,label,title,meta,accent,token in TEAMS:
 for fp in glob.glob(os.path.join(ROOT,"scouting","*.html")):
     inject(fp, "")
 print(f"  scouting reports: {len(REPORTS)}")
+
+# 2a. regenerate any standalone page that has its own generator, BEFORE the
+# switcher is injected. This is what keeps them behaving like team dashboards:
+# fresh plaintext every run, so publish.sh encrypts plaintext exactly once and we
+# never again have to decrypt a published page just to edit it. A generator that
+# cannot find its upstream data exits quietly and leaves the page as-is.
+for slug,*_ in PAGES:
+    gen = os.path.join(ROOT, slug, "generate.py")
+    if os.path.exists(gen):
+        r = sh("python3 generate.py", os.path.join(ROOT, slug))
+        for line in (r.stdout or "").strip().splitlines():
+            print(line)
+        if r.returncode != 0:
+            print(f"  {slug}: generate.py FAILED\n{(r.stderr or '').strip()[:400]}")
 
 # 2b. inject switcher into standalone pages. active="" — these are listed under
 # Reports on the hub landing, not given their own tab, so no tab is highlighted.
